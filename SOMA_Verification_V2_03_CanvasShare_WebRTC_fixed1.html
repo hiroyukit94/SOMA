@@ -1,0 +1,5310 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SOMA 検証用 V2｜工程② ビデオ通話</title>
+
+<style>
+:root{
+  --bg:#f7fafc;
+  --white:#fff;
+  --text:#172033;
+  --muted:#7b8798;
+  --line:#e3e9ef;
+  --blue:#2563eb;
+  --mint:#19b98a;
+  --softblue:#eef5ff;
+  --softmint:#edfdf7;
+  --danger:#ef4444;
+  --sidebar:240px;
+}
+
+*{box-sizing:border-box}
+
+html,body{
+  margin:0;
+  width:100%;
+  min-height:100%;
+  font-family:-apple-system,BlinkMacSystemFont,"Hiragino Sans",
+  "Hiragino Kaku Gothic ProN","Yu Gothic",Meiryo,sans-serif;
+  color:var(--text);
+  background:var(--bg);
+}
+
+button,input,textarea,select{
+  font:inherit;
+}
+
+button{
+  border:0;
+  cursor:pointer;
+}
+
+button:disabled{
+  opacity:.45;
+  cursor:not-allowed;
+}
+
+.app{
+  min-height:100vh;
+}
+
+/* =========================
+   SIDEBAR
+========================= */
+
+.side{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width:var(--sidebar);
+  background:#fff;
+  border-right:1px solid var(--line);
+  padding:22px 15px;
+  z-index:30;
+}
+
+.logo{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  padding:4px 10px 25px;
+  font-size:21px;
+  font-weight:800;
+  letter-spacing:.02em;
+}
+
+.mark{
+  display:inline-grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  border-radius:50%;
+  background:linear-gradient(135deg,#2563eb,#19b98a);
+  color:#fff;
+  font-weight:800;
+  flex:none;
+}
+
+.nav{
+  display:flex;
+  flex-direction:column;
+  gap:3px;
+}
+
+.nav button{
+  width:100%;
+  text-align:left;
+  background:transparent;
+  color:#667386;
+  padding:11px 12px;
+  border-radius:10px;
+  transition:.15s;
+}
+
+.nav button:hover,
+.nav button.on{
+  background:var(--softblue);
+  color:var(--blue);
+}
+
+.sep{
+  height:1px;
+  background:var(--line);
+  margin:16px 8px;
+}
+
+.user{
+  position:absolute;
+  left:22px;
+  right:18px;
+  bottom:20px;
+  color:#647083;
+  line-height:1.5;
+}
+
+.user-avatar{
+  display:inline-grid;
+  place-items:center;
+  width:30px;
+  height:30px;
+  border-radius:50%;
+  background:#e8f0ff;
+  color:var(--blue);
+  margin-bottom:4px;
+  font-weight:700;
+}
+
+.user b{
+  display:block;
+  color:var(--text);
+}
+
+.user small{
+  display:block;
+}
+
+/* =========================
+   MAIN
+========================= */
+
+.main{
+  margin-left:var(--sidebar);
+  min-height:100vh;
+}
+
+.screen{
+  display:none;
+  min-height:100vh;
+  padding:46px 52px;
+}
+
+.screen.on{
+  display:block;
+}
+
+.eyebrow{
+  font-size:12px;
+  letter-spacing:.15em;
+  color:var(--blue);
+  font-weight:800;
+}
+
+.head{
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+  gap:25px;
+  margin-bottom:30px;
+}
+
+.head h1{
+  margin:8px 0;
+  font-size:38px;
+  letter-spacing:-.02em;
+}
+
+.muted{
+  color:var(--muted);
+}
+
+.primary{
+  background:var(--blue);
+  color:#fff;
+  border-radius:10px;
+  padding:12px 17px;
+  font-weight:600;
+}
+
+.secondary{
+  background:#fff;
+  color:var(--text);
+  border:1px solid var(--line);
+  border-radius:10px;
+  padding:11px 16px;
+}
+
+.secondary:hover{
+  background:#f8fafc;
+}
+
+.full{
+  width:100%;
+}
+
+/* =========================
+   START
+========================= */
+
+.start{
+  min-height:calc(100vh - 92px);
+  display:grid;
+  place-items:center;
+  text-align:center;
+  border-radius:28px;
+  background:
+    radial-gradient(circle at 18% 20%,rgba(219,234,254,.35),transparent 30%),
+    radial-gradient(circle at 82% 70%,rgba(209,250,229,.3),transparent 32%),
+    linear-gradient(135deg,#fff,#f8fbfc);
+  position:relative;
+  overflow:hidden;
+}
+
+.start-inner{
+  width:min(920px,92%);
+  padding:40px 0;
+}
+
+.start .eyebrow{
+  font-size:28px;
+  letter-spacing:.06em;
+  margin-bottom:18px;
+}
+
+.start h1{
+  margin:0;
+  font-size:54px;
+  line-height:1.22;
+  letter-spacing:-.035em;
+  font-weight:750;
+}
+
+.start-desc{
+  color:var(--muted);
+  font-size:18px;
+  line-height:1.9;
+  margin:22px 0 0;
+}
+
+.startcards{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+  width:min(760px,100%);
+  margin:38px auto 0;
+}
+
+.startcard{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:20px;
+  padding:27px;
+  box-shadow:0 10px 30px rgba(31,45,61,.06);
+  display:flex;
+  flex-direction:column;
+  gap:9px;
+  text-align:left;
+}
+
+.startcard b{
+  font-size:18px;
+}
+
+.startcard small{
+  color:var(--muted);
+}
+
+.startcard strong{
+  display:block;
+  background:var(--blue);
+  color:#fff;
+  text-align:center;
+  padding:12px;
+  border-radius:9px;
+  margin-top:8px;
+}
+
+.startcard.mint strong{
+  background:var(--mint);
+}
+
+.startcard input{
+  width:100%;
+  margin-top:4px;
+}
+
+.start-link{
+  color:var(--blue);
+  text-decoration:none;
+  font-size:13px;
+}
+
+.start-link:hover{
+  text-decoration:underline;
+}
+
+/* =========================
+   INPUTS
+========================= */
+
+input,
+textarea,
+select{
+  border:1px solid var(--line);
+  background:#fff;
+  border-radius:10px;
+  padding:11px 13px;
+  outline:none;
+}
+
+input:focus,
+textarea:focus,
+select:focus{
+  border-color:#a9c5ff;
+  box-shadow:0 0 0 3px rgba(37,99,235,.08);
+}
+
+/* =========================
+   MY SOMA
+========================= */
+
+.search{
+  width:250px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:18px;
+}
+
+.card{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  padding:15px;
+  box-shadow:0 10px 30px rgba(31,45,61,.06);
+  cursor:pointer;
+  transition:.15s;
+}
+
+.card:hover{
+  transform:translateY(-2px);
+  box-shadow:0 15px 35px rgba(31,45,61,.1);
+}
+
+.thumb{
+  height:140px;
+  border-radius:12px;
+  display:grid;
+  place-items:center;
+  font-weight:800;
+  color:#41617d;
+  background:
+    linear-gradient(135deg,#eff7ff,#effcf7);
+  margin-bottom:9px;
+}
+
+.card small{
+  display:block;
+  color:var(--muted);
+  margin-top:5px;
+}
+
+/* =========================
+   CANVAS HEADER
+========================= */
+
+.canvas-screen{
+  padding:0!important;
+  background:#eef3f7;
+}
+
+.canvasHead{
+  height:70px;
+  background:#fff;
+  border-bottom:1px solid var(--line);
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 18px;
+  gap:15px;
+  position:relative;
+  z-index:10;
+}
+
+.canvas-title{
+  display:flex;
+  align-items:center;
+  gap:8px;
+  min-width:0;
+}
+
+.canvas-title-name{
+  font-weight:700;
+  max-width:360px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+.save-state{
+  color:var(--mint);
+  font-size:12px;
+  font-weight:600;
+}
+
+.canvas-actions{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
+
+.canvas-actions button{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:9px;
+  padding:9px 12px;
+}
+
+.canvas-actions .primary{
+  border:0;
+  color:#fff;
+}
+
+/* =========================
+   CANVAS AREA
+========================= */
+
+.canvas-layout{
+  padding:18px;
+  display:grid;
+  grid-template-columns:82px minmax(0,1fr) 250px;
+  gap:15px;
+  min-height:calc(100vh - 70px);
+}
+
+.tools,
+.right{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  padding:10px;
+}
+
+.tools{
+  align-self:start;
+  position:sticky;
+  top:18px;
+}
+
+.tools button{
+  width:100%;
+  padding:10px 3px;
+  border-radius:8px;
+  font-size:12px;
+  color:#657285;
+  background:transparent;
+  margin-bottom:3px;
+}
+
+.tools button:hover,
+.tools button.on{
+  background:var(--softblue);
+  color:var(--blue);
+}
+
+.tool-separator{
+  height:1px;
+  background:var(--line);
+  margin:7px 3px;
+}
+.shape-palette{display:none;position:absolute;left:calc(100% + 10px);top:160px;width:190px;padding:10px;background:#fff;border:1px solid var(--line);border-radius:14px;box-shadow:0 14px 34px rgba(31,45,61,.14);z-index:120;}
+.shape-palette.show{display:block;}
+.shape-palette-title{font-size:12px;font-weight:800;color:#647083;padding:4px 7px 8px;}
+.shape-palette button{display:block;width:100%;margin:2px 0;padding:9px 10px;text-align:left;background:#f7f9fb;border-radius:8px;}
+.shape-palette button:hover{background:var(--softblue);color:var(--blue);}
+
+.board-area{
+  min-width:0;
+  overflow:auto;
+}
+
+.board-wrap{
+  position:relative;
+  width:1500px;
+  min-height:980px;
+  background:#fff;
+  border-radius:14px;
+  box-shadow:0 10px 30px rgba(31,45,61,.08);
+  overflow:hidden;
+}
+
+#board{
+  position:absolute;
+  left:0;
+  top:0;
+  width:1500px;
+  height:980px;
+  background:#fff;
+  z-index:1;
+  touch-action:none;
+}
+
+.object-layer{
+  position:absolute;
+  inset:0;
+  z-index:2;
+  pointer-events:none;
+}
+
+.canvas-object{
+  position:absolute;
+  pointer-events:auto;
+  user-select:none;
+}
+
+.text-object{
+  min-width:80px;
+  padding:5px 8px;
+  white-space:pre-wrap;
+  color:var(--text);
+  cursor:move;
+}
+
+.shape-object{
+  cursor:move;
+}
+
+.shape-rect{
+  border:3px solid var(--blue);
+  background:rgba(37,99,235,.05);
+}
+.shape-roundrect{border:3px solid var(--blue);background:rgba(37,99,235,.05);border-radius:18px;}
+.shape-diamond{border:3px solid var(--blue);background:rgba(37,99,235,.05);transform:rotate(45deg) scale(.72);}
+.shape-line{width:220px;height:3px;background:var(--blue);transform-origin:left center;}
+
+.shape-circle{
+  border:3px solid var(--mint);
+  background:rgba(25,185,138,.05);
+  border-radius:50%;
+}
+
+.shape-arrow{
+  width:160px;
+  height:3px;
+  background:var(--blue);
+  transform-origin:left center;
+}
+
+.shape-arrow:after{
+  content:"";
+  position:absolute;
+  right:-1px;
+  top:-7px;
+  border-left:14px solid var(--blue);
+  border-top:8px solid transparent;
+  border-bottom:8px solid transparent;
+}
+
+.image-object{
+  border-radius:10px;
+  overflow:hidden;
+  box-shadow:0 5px 15px rgba(0,0,0,.08);
+  cursor:move;
+}
+
+.image-object img{
+  display:block;
+  width:100%;
+  height:100%;
+  object-fit:contain;
+}
+
+.tab-object{
+  background:#fff;
+  border:2px solid var(--blue);
+  border-radius:12px;
+  box-shadow:0 8px 22px rgba(31,45,61,.1);
+  cursor:move;
+  padding:12px 14px;
+  overflow:hidden;
+}
+
+.tab-object .tab-title{
+  font-weight:800;
+  margin-bottom:6px;
+}
+
+.tab-object .tab-body{
+  color:#5f6d7d;
+  font-size:13px;
+  line-height:1.6;
+}
+
+.selected{
+  outline:2px solid var(--blue);
+  outline-offset:3px;
+}
+
+.resize-handle{
+  position:absolute;
+  width:10px;
+  height:10px;
+  right:-5px;
+  bottom:-5px;
+  background:var(--blue);
+  border:2px solid #fff;
+  border-radius:50%;
+  cursor:nwse-resize;
+}
+
+.canvas-bottom{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:15px;
+  background:#fff;
+  padding:8px;
+  border-radius:10px;
+  margin-top:8px;
+}
+
+.dots{
+  display:flex;
+  gap:7px;
+  align-items:center;
+}
+
+.dot{
+  width:21px;
+  height:21px;
+  border-radius:50%;
+  border:2px solid #fff;
+  box-shadow:0 0 0 1px #d5dbe2;
+  cursor:pointer;
+}
+
+.page-label{
+  color:#647083;
+  font-size:13px;
+}
+
+/* =========================
+   RIGHT PANEL
+========================= */
+
+.right{
+  align-self:start;
+  position:sticky;
+  top:18px;
+}
+
+.right-tabs{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:4px;
+  margin-bottom:10px;
+}
+
+.right-tabs button{
+  padding:8px;
+  border-radius:8px;
+  background:#f7f9fb;
+  color:#647083;
+}
+
+.right-tabs button.on{
+  background:var(--softblue);
+  color:var(--blue);
+}
+
+.page-preview{
+  height:105px;
+  border:1px dashed #cbd5e1;
+  border-radius:9px;
+  display:grid;
+  place-items:center;
+  margin:10px 0;
+  background:#fff;
+  cursor:pointer;
+}
+
+.page-preview.on{
+  border-color:var(--blue);
+  background:#f7faff;
+}
+
+.page-preview b{
+  font-size:12px;
+}
+
+.page-preview small{
+  color:var(--muted);
+  display:block;
+  margin-top:4px;
+}
+
+.page-list{
+  max-height:230px;
+  overflow:auto;
+}
+
+.add-page{
+  margin-bottom:15px;
+}
+
+.calc{
+  border:1px solid var(--line);
+  border-radius:12px;
+  padding:10px;
+  margin-top:15px;
+  background:#fbfcfd;
+}
+
+.calc-display{
+  width:100%;
+  text-align:right;
+  font-size:22px;
+  margin:8px 0;
+  background:#fff;
+}
+
+.calc-result{
+  min-height:22px;
+  text-align:right;
+  color:var(--muted);
+  font-size:12px;
+}
+
+.calcgrid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:5px;
+}
+
+.calcgrid button{
+  background:#eef2f6;
+  padding:10px 5px;
+  border-radius:7px;
+  color:var(--text);
+}
+
+.calcgrid button:hover{
+  background:#e3e9ef;
+}
+
+.calcgrid .operator{
+  background:#e9f1ff;
+  color:var(--blue);
+}
+
+.calcgrid .equals{
+  background:var(--blue);
+  color:#fff;
+}
+
+.calcgrid .clear{
+  background:#fff0f0;
+  color:var(--danger);
+}
+
+/* =========================
+   PROFILE / HISTORY / SETTINGS
+========================= */
+
+.twocol{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:20px;
+}
+
+.panel{
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:18px;
+  box-shadow:0 10px 30px rgba(31,45,61,.06);
+  padding:20px;
+}
+
+.profile-preview-panel{padding:4px 0;}
+.profile-preview-card{display:flex;align-items:center;gap:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:#fff;}
+.profile-preview-avatar{width:52px;height:52px;border-radius:50%;display:grid;place-items:center;flex:none;background:linear-gradient(135deg,#dbeafe,#d8f8ed);color:var(--blue);font-weight:800;overflow:hidden;background-size:cover;}
+.profile-preview-info{min-width:0;flex:1;}
+.profile-preview-info b,.profile-preview-info span,.profile-preview-info small{display:block;}
+.profile-preview-info span{color:#647083;font-size:12px;margin-top:2px;}
+.profile-preview-info span i{display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--mint);}
+.profile-preview-info small{color:var(--muted);margin-top:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.profile-preview-card em{font-style:normal;font-size:11px;padding:5px 8px;border-radius:999px;background:var(--softblue);color:var(--blue);}
+.profile-preview-context{margin-top:18px;padding:16px;border-radius:14px;background:#f8fafc;}
+.profile-preview-context span{margin-left:8px;font-size:12px;color:var(--mint);}
+.profile-preview-context small{display:block;margin-top:7px;color:var(--muted);}
+.profilepic{
+  width:130px;
+  height:130px;
+  border-radius:50%;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#dbeafe,#d8f8ed);
+  color:var(--blue);
+  font-size:27px;
+  font-weight:800;
+  margin:10px 0;
+}
+
+.label{
+  display:block;
+  color:#647083;
+  font-size:13px;
+  margin-top:16px;
+}
+
+.label input,
+.label textarea,
+.label select{
+  display:block;
+  width:100%;
+  margin-top:6px;
+}
+
+.historyitem{
+  padding:13px;
+  border-left:2px solid #d8e1eb;
+  margin:8px 0;
+  cursor:pointer;
+}
+
+.historyitem:hover,
+.historyitem.active{
+  background:var(--softblue);
+  border-radius:10px;
+}
+
+.historyitem b{
+  display:block;
+}
+
+.historyitem small{
+  color:var(--muted);
+}
+
+.settings button{
+  display:block;
+  width:100%;
+  text-align:left;
+  padding:14px;
+  border-radius:10px;
+  background:transparent;
+}
+
+.settings button:hover,
+.settings button.on{
+  background:var(--softblue);
+  color:var(--blue);
+}
+
+.settings button small{
+  display:block;
+  color:var(--muted);
+  margin-top:3px;
+}
+
+/* =========================
+   MODALS
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.32);
+  display:grid;
+  place-items:center;
+  z-index:100;
+  padding:20px;
+}
+
+.modal.hide{
+  display:none;
+}
+
+.modalbox{
+  background:#fff;
+  border-radius:18px;
+  padding:25px;
+  width:min(470px,95vw);
+  max-height:90vh;
+  overflow:auto;
+  position:relative;
+  box-shadow:0 25px 70px rgba(0,0,0,.18);
+}
+
+.close{
+  position:absolute;
+  right:15px;
+  top:10px;
+  font-size:24px;
+  background:transparent;
+  color:#657285;
+}
+
+.modalbox h2{
+  margin-top:0;
+}
+
+.modal-actions{
+  display:flex;
+  gap:8px;
+  margin-top:18px;
+}
+
+.modal-actions button{
+  flex:1;
+}
+
+.invite-code{
+  padding:18px;
+  border-radius:12px;
+  background:#f5f8fb;
+  text-align:center;
+  font-size:27px;
+  font-weight:800;
+  letter-spacing:.12em;
+  margin:15px 0;
+}
+
+/* =========================
+   TOAST
+========================= */
+
+.toast{
+  position:fixed;
+  right:24px;
+  bottom:24px;
+  background:#172033;
+  color:#fff;
+  padding:12px 17px;
+  border-radius:10px;
+  opacity:0;
+  transform:translateY(10px);
+  pointer-events:none;
+  transition:.2s;
+  z-index:200;
+}
+
+.toast.show{
+  opacity:1;
+  transform:translateY(0);
+}
+
+/* =========================
+   RESPONSIVE
+========================= */
+
+@media(max-width:1100px){
+  .canvas-layout{
+    grid-template-columns:70px minmax(0,1fr);
+  }
+
+  .right{
+    display:none;
+  }
+
+  .grid{
+    grid-template-columns:repeat(2,1fr);
+  }
+}
+
+@media(max-width:800px){
+  :root{
+    --sidebar:190px;
+  }
+
+  .screen{
+    padding:30px 25px;
+  }
+
+  .start h1{
+    font-size:42px;
+  }
+
+  .twocol{
+    grid-template-columns:1fr;
+  }
+
+  .head{
+    display:block;
+  }
+
+  .head>div:last-child{
+    margin-top:15px;
+  }
+}
+
+@media(max-width:650px){
+  .side{
+    display:none;
+  }
+
+  .main{
+    margin-left:0;
+  }
+
+  .screen{
+    padding:20px 15px;
+  }
+
+  .start{
+    min-height:calc(100vh - 40px);
+  }
+
+  .start h1{
+    font-size:34px;
+  }
+
+  .start-desc{
+    font-size:15px;
+  }
+
+  .startcards{
+    grid-template-columns:1fr;
+  }
+
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .canvas-layout{
+    grid-template-columns:58px minmax(0,1fr);
+    padding:8px;
+    gap:8px;
+  }
+
+  .canvasHead{
+    height:auto;
+    min-height:64px;
+    padding:8px 10px;
+  }
+
+  .canvas-actions button:not(.primary){
+    display:none;
+  }
+}
+
+/* =========================
+   PRINT
+========================= */
+
+@media print{
+  .side,
+  .canvasHead,
+  .tools,
+  .right,
+  .canvas-bottom{
+    display:none!important;
+  }
+
+  .main{
+    margin:0!important;
+  }
+
+  .screen{
+    display:none!important;
+  }
+
+  #canvas{
+    display:block!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+
+  .canvas-layout{
+    display:block!important;
+    padding:0!important;
+  }
+
+  .board-area{
+    overflow:visible!important;
+  }
+
+  .board-wrap{
+    box-shadow:none!important;
+    transform:none!important;
+  }
+}
+
+
+/* =========================================================
+   SOMA TAB COLOR PALETTE
+========================================================= */
+
+.tab-color-panel{
+  display:none;
+  position:absolute;
+  left:calc(100% + 10px);
+  top:290px;
+  z-index:100;
+  width:188px;
+  padding:12px;
+  background:#fff;
+  border:1px solid var(--line);
+  border-radius:14px;
+  box-shadow:0 12px 30px rgba(31,45,61,.12);
+}
+
+.tab-color-panel.show{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+}
+
+.tab-color-option{
+  width:32px;
+  height:28px;
+  padding:0;
+  border-radius:8px;
+  border:1px solid rgba(31,45,61,.10);
+  cursor:pointer;
+}
+
+.tab-color-option:hover{
+  transform:scale(1.06);
+}
+
+.tab-color-label{
+  grid-column:1 / -1;
+  font-size:12px;
+  font-weight:700;
+  color:#647083;
+  margin-bottom:2px;
+}
+
+
+/* =========================================================
+   VOICE CALL / WEBRTC VERIFICATION - ENGINE 01
+   既存SOMA軸の機能・CSS・JSには変更を加えない。
+========================================================= */
+.voice-modal-note{font-size:13px;line-height:1.7;color:var(--muted)}
+.voice-id-box{padding:13px 14px;border:1px solid var(--line);background:#f7f9fb;border-radius:10px;font-size:13px;font-weight:700;word-break:break-all;margin:8px 0 14px}
+.voice-status{padding:11px 13px;border-radius:10px;background:var(--softblue);color:#365a8c;font-size:13px;margin:14px 0}
+.voice-status.ok{background:var(--softmint);color:#167a5c}
+.voice-status.error{background:#fff0f0;color:#b42318}
+.voice-actions{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.voice-actions button{min-height:44px}
+.voice-actions button:disabled{cursor:not-allowed;opacity:.55}
+.voice-call-timer{font-size:12px;color:var(--muted);text-align:center;margin-top:8px}
+.video-stage{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:14px 0}
+.video-tile{position:relative;min-height:190px;border:1px solid var(--line);border-radius:12px;background:#0f1720;overflow:hidden}
+.video-tile video{display:block;width:100%;height:190px;object-fit:cover;background:#0f1720}
+.video-label{position:absolute;left:9px;top:9px;padding:4px 8px;border-radius:999px;background:rgba(0,0,0,.55);color:#fff;font-size:11px;z-index:2}
+.video-placeholder{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:#aeb8c5;font-size:13px}
+@media(max-width:700px){.video-stage{grid-template-columns:1fr}.video-tile,.video-tile video{min-height:180px;height:180px}}
+
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<aside class="side">
+
+  <div class="logo">
+    <span class="mark">S</span>
+    <span>SOMA</span>
+  </div>
+
+  <nav class="nav">
+
+    <button data-screen="my">⌂　MY SOMA</button>
+
+    <button data-screen="canvas">▣　共有されたSOMA</button>
+
+    <button data-screen="my">☆　お気に入り</button>
+
+    <button data-screen="my">◷　最近使ったSOMA</button>
+
+    <button data-screen="history">↺　履歴</button>
+
+    <button data-trash>□　ゴミ箱</button>
+
+    <div class="sep"></div>
+
+    <button data-screen="profile">♙　プロフィール</button>
+
+    <button data-screen="settings">⚙　設定</button>
+
+    <button data-help>？　ヘルプ・サポート</button>
+
+  </nav>
+
+  <div class="user">
+    <span class="user-avatar">山</span>
+    <b id="userName">山田 太郎</b>
+    <small>オンライン</small>
+  </div>
+
+</aside>
+
+
+<main class="main">
+
+<!-- =========================
+     START
+========================= -->
+
+<section id="start" class="screen">
+
+  <div class="start">
+
+    <div class="start-inner">
+
+      <div class="eyebrow">SOMA</div>
+
+      <h1>
+        一緒に考え、確認する。
+      </h1>
+
+      <p class="start-desc">
+        話しながら、描きながら、<br>
+        リアルタイムで認識を共有する共同キャンバス。
+      </p>
+
+      <div class="startcards">
+
+        <button class="startcard" data-new>
+
+          <b>＋ NEW SOMA</b>
+
+          <small>新しくSOMAを作る</small>
+
+          <strong>作成する</strong>
+
+        </button>
+
+
+        <div class="startcard">
+
+          <b>♧ JOIN SOMA</b>
+
+          <small>招待コードで参加する</small>
+
+          <input
+            id="joinCode"
+            placeholder="招待コードを入力"
+          >
+
+          <button
+            data-join
+            style="
+              background:var(--mint);
+              color:#fff;
+              padding:11px;
+              border-radius:9px;
+              margin-top:8px;
+            "
+          >
+            参加する
+          </button>
+
+        </div>
+
+      </div>
+
+      <p style="font-size:13px">
+        招待リンクをお持ちですか？
+        <a href="#" class="start-link" data-invite-link>
+          こちらから参加できます
+        </a>
+      </p>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     MY SOMA
+========================= -->
+
+<section id="my" class="screen">
+
+  <div class="head">
+
+    <div>
+      <div class="eyebrow">SOMA</div>
+      <h1>MY SOMA</h1>
+    </div>
+
+    <div>
+      <input
+        class="search"
+        id="search"
+        placeholder="SOMAを検索"
+      >
+
+      <button class="primary" data-new>
+        ＋ 新しいSOMA
+      </button>
+    </div>
+
+  </div>
+
+  <div class="grid" id="cards"></div>
+
+</section>
+
+
+<!-- =========================
+     CANVAS
+========================= -->
+
+<section id="canvas" class="screen canvas-screen">
+
+  <header class="canvasHead">
+
+    <div class="canvas-title">
+
+      <span
+        class="mark"
+        style="width:28px;height:28px;font-size:14px"
+      >S</span>
+
+      <span
+        class="canvas-title-name"
+        id="canvasName"
+      >新商品企画</span>
+
+      <span
+        class="save-state"
+        id="saveState"
+      >✓ 自動保存済み</span>
+
+    </div>
+
+    <div class="canvas-actions">
+
+      <button
+        class="primary"
+        data-participants
+      >
+        ＋ 参加者を招待
+      </button>
+
+      <button data-print>
+        PDF出力
+      </button>
+
+      <button data-export-png>
+        PNG
+      </button>
+
+      <button data-share>
+        共有
+      </button>
+
+      <button data-voice-call>
+        🎙️ 音声通話
+      </button>
+
+    </div>
+
+  </header>
+
+
+  <div class="canvas-layout">
+
+    <!-- TOOLS -->
+
+    <div class="tools">
+
+      <button
+        class="on"
+        data-tool="select"
+      >選択</button>
+
+      <button data-tool="pen">
+        ペン
+      </button>
+
+      <button data-tool="eraser">
+        消しゴム
+      </button>
+
+      <button data-tool="text">
+        文字
+      </button>
+
+      <button data-tool="shape">
+        図形
+      </button>
+      <div class="shape-palette" id="shapePalette">
+        <div class="shape-palette-title">図形を選択</div>
+        <button type="button" data-shape="rect">□ 四角形</button>
+        <button type="button" data-shape="roundrect">▢ 角丸四角形</button>
+        <button type="button" data-shape="circle">○ 円</button>
+        <button type="button" data-shape="diamond">◇ ひし形</button>
+        <button type="button" data-shape="arrow">→ 矢印</button>
+        <button type="button" data-shape="line">― 線</button>
+      </div>
+
+      <button data-tool="image">
+        画像
+      </button>
+
+      <button data-tool="tab">
+        TAB
+      </button>
+
+      <button type="button" data-tab-color-button>
+        カラー
+      </button>
+
+      <div class="tool-separator"></div>
+
+      <button data-undo>
+        ↶ Undo
+      </button>
+
+      <button data-redo>
+        ↷ Redo
+      </button>
+
+      <div class="tool-separator"></div>
+
+      <button data-other>
+        ＋その他
+      </button>
+
+    </div>
+
+
+    <!-- BOARD -->
+
+    <div class="board-area">
+
+      <div
+        class="board-wrap"
+        id="boardWrap"
+      >
+
+        <canvas
+          id="board"
+          width="1500"
+          height="980"
+        ></canvas>
+
+        <div
+          class="object-layer"
+          id="objectLayer"
+        ></div>
+
+      </div>
+
+
+      <div class="canvas-bottom">
+
+        <div class="dots">
+
+          <i
+            class="dot"
+            data-color="#172033"
+            style="background:#172033"
+          ></i>
+
+          <i
+            class="dot"
+            data-color="#ef4444"
+            style="background:#ef4444"
+          ></i>
+
+          <i
+            class="dot"
+            data-color="#f59e0b"
+            style="background:#f59e0b"
+          ></i>
+
+          <i
+            class="dot"
+            data-color="#19b98a"
+            style="background:#19b98a"
+          ></i>
+
+          <i
+            class="dot"
+            data-color="#2563eb"
+            style="background:#2563eb"
+          ></i>
+
+          <i
+            class="dot"
+            data-color="#7c3aed"
+            style="background:#7c3aed"
+          ></i>
+
+        </div>
+
+        <span class="page-label" id="pageLabel">
+          ページ 1 / 1
+        </span>
+
+        <div>
+          <button
+            class="secondary"
+            data-clear
+          >
+            クリア
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+
+    <!-- RIGHT -->
+
+    <aside class="right">
+
+      <div class="right-tabs">
+
+        <button
+          class="on"
+          data-right-tab="pages"
+        >
+          ページ
+        </button>
+
+        <button
+          data-right-tab="participants"
+        >
+          参加者（6）
+        </button>
+
+      </div>
+
+
+      <div id="pagesPanel">
+
+        <div
+          class="page-list"
+          id="pageList"
+        ></div>
+
+        <button
+          class="secondary full add-page"
+          data-add-page
+        >
+          ＋ 新しいページ
+        </button>
+
+      </div>
+
+
+      <div
+        id="participantsPanel"
+        style="display:none"
+      >
+
+        <div class="panel" style="padding:12px">
+
+          <p>
+            ● 山田 太郎　作成者
+          </p>
+
+          <p>
+            ● 佐藤 花子　編集中
+          </p>
+
+          <p>
+            ● 鈴木 一郎　閲覧中
+          </p>
+
+          <button
+            class="primary full"
+            data-participants
+          >
+            ＋ 参加者を招待
+          </button>
+
+        </div>
+
+      </div>
+
+
+      <!-- CALCULATOR -->
+
+      <div class="calc">
+
+        <b>計算機</b>
+
+        <input
+          id="calcDisplay"
+          class="calc-display"
+          value=""
+          readonly
+        >
+
+        <div
+          class="calc-result"
+          id="calcResult"
+        ></div>
+
+        <div class="calcgrid">
+
+          <button class="clear" data-calc="C">C</button>
+          <button data-calc="back">⌫</button>
+          <button data-calc="%">%</button>
+          <button class="operator" data-calc="/">÷</button>
+
+          <button data-calc="7">7</button>
+          <button data-calc="8">8</button>
+          <button data-calc="9">9</button>
+          <button class="operator" data-calc="*">×</button>
+
+          <button data-calc="4">4</button>
+          <button data-calc="5">5</button>
+          <button data-calc="6">6</button>
+          <button class="operator" data-calc="-">−</button>
+
+          <button data-calc="1">1</button>
+          <button data-calc="2">2</button>
+          <button data-calc="3">3</button>
+          <button class="operator" data-calc="+">＋</button>
+
+          <button data-calc="0">0</button>
+          <button data-calc=".">.</button>
+          <button
+            class="equals"
+            data-calc="="
+            style="grid-column:span 2"
+          >=</button>
+
+        </div>
+
+      </div>
+
+    </aside>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     PROFILE
+========================= -->
+
+<section id="profile" class="screen">
+
+  <div class="head">
+
+    <div>
+      <div class="eyebrow">SOMA</div>
+      <h1>プロフィール設定</h1>
+    </div>
+
+    <button
+      class="primary"
+      data-profile-save
+    >
+      ✓ 保存する
+    </button>
+
+  </div>
+
+
+  <div class="twocol">
+
+    <div class="panel">
+
+      <h2>プロフィール画像</h2>
+
+      <div class="profilepic" id="profilePic">
+        山田
+      </div>
+
+      <button
+        class="secondary"
+        data-profile-image
+      >
+        画像を変更する
+      </button>
+
+      <input
+        type="file"
+        id="profileImageInput"
+        accept="image/*"
+        hidden
+      >
+
+      <label class="label">
+        名前（必須）
+        <input
+          id="profileName"
+          value="山田 太郎"
+        >
+      </label>
+
+      <label class="label">
+        表示名
+        <input
+          id="profileDisplayName"
+          value="山田 太郎"
+        >
+      </label>
+
+      <label class="label">
+        一言プロフィール（任意）
+        <textarea id="profileMessage">アイデアをカタチにするのが好きです。</textarea>
+      </label>
+
+      <label class="label">
+        メールアドレス
+        <input
+          value="taro.yamada@example.com"
+          disabled
+        >
+      </label>
+
+    </div>
+
+
+    <div class="profile-preview-panel">
+
+      <h2>SOMA内での表示</h2>
+
+      <div class="profile-preview-card">
+        <div class="profile-preview-avatar" id="profilePreviewAvatar">山田</div>
+        <div class="profile-preview-info">
+          <b id="profilePreviewName">山田 太郎</b>
+          <span><i></i> オンライン</span>
+          <small id="profilePreviewMessage">アイデアをカタチにするのが好きです。</small>
+        </div>
+        <em>作成者</em>
+      </div>
+
+      <div class="profile-preview-context">
+        <b>新商品企画</b><span>編集中</span>
+        <small>参加者表示やコメントで使用されるプロフィールです。</small>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     HISTORY
+========================= -->
+
+<section id="history" class="screen">
+
+  <div class="head">
+
+    <div>
+      <div class="eyebrow">SOMA</div>
+
+      <h1>履歴（History）</h1>
+
+      <p class="muted">
+        SOMA内の変更履歴を確認し、必要に応じて過去の状態に戻すことができます。
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="twocol">
+
+    <div class="panel">
+
+      <h2>履歴一覧</h2>
+
+      <div id="historyList"></div>
+
+    </div>
+
+
+    <div class="panel">
+
+      <h2>プレビュー</h2>
+
+      <div
+        class="page-preview"
+        style="height:400px"
+      >
+        <div>
+          <b>新商品コンセプト</b>
+          <br><br>
+          シンプルで使いやすい
+          <br><br>
+          すべての人にとって価値のある商品
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+</section>
+
+
+<!-- =========================
+     SETTINGS
+========================= -->
+
+<section id="settings" class="screen">
+
+  <div class="head">
+
+    <div>
+      <div class="eyebrow">SOMA</div>
+
+      <h1>設定</h1>
+
+      <p class="muted">
+        SOMAの使い方や表示、通知、データ管理などを設定できます。
+      </p>
+
+    </div>
+
+  </div>
+
+
+  <div class="twocol">
+
+    <div class="panel settings">
+
+      <button class="on">
+        通知設定
+        <small>メール・アプリの通知を設定</small>
+      </button>
+
+      <button>
+        キャンバス設定
+        <small>表示や操作に関する設定</small>
+      </button>
+
+      <button>
+        表示設定
+        <small>テーマや表示に関する設定</small>
+      </button>
+
+      <button>
+        言語設定
+        <small>言語や地域に関する設定</small>
+      </button>
+
+      <button>
+        データ管理
+        <small>保存容量やデータの管理</small>
+      </button>
+
+      <button>
+        セキュリティ
+        <small>パスワードや認証の設定</small>
+      </button>
+
+    </div>
+
+
+    <div class="panel">
+
+      <h2>基本設定</h2>
+
+      <label class="label">
+        通知を受け取る　
+        <input
+          type="checkbox"
+          checked
+          data-setting="notice"
+        >
+      </label>
+
+      <label class="label">
+        他の参加者の操作を通知　
+        <input
+          type="checkbox"
+          checked
+          data-setting="participantNotice"
+        >
+      </label>
+
+      <label class="label">
+        自動保存　
+        <input
+          type="checkbox"
+          checked
+          data-setting="autosave"
+        >
+      </label>
+
+      <h3>キャンバスの既定設定</h3>
+
+      <label class="label">
+        ペンの太さ
+        <input
+          type="range"
+          id="penSize"
+          value="4"
+          min="1"
+          max="20"
+        >
+      </label>
+
+      <label class="label">
+        背景カラー
+        <select id="canvasBackground">
+          <option value="#ffffff">白</option>
+          <option value="#f5f6f7">ライトグレー</option>
+          <option value="#f2f7ff">淡いブルー</option>
+          <option value="#f2fbf7">淡いグリーン</option>
+        </select>
+      </label>
+
+    </div>
+
+  </div>
+
+</section>
+
+</main>
+</div>
+
+
+<!-- =========================
+     PARTICIPANT MODAL
+========================= -->
+
+<div
+  id="participantModal"
+  class="modal hide"
+>
+
+  <div class="modalbox">
+
+    <button
+      class="close"
+      data-close-modal
+    >×</button>
+
+    <h2>PARTICIPANTS</h2>
+
+    <p>
+      ● 山田 太郎　作成者
+    </p>
+
+    <p>
+      ● 佐藤 花子　編集中
+    </p>
+
+    <p>
+      ● 鈴木 一郎　閲覧中
+    </p>
+
+    <button
+      class="primary full"
+      data-generate-invite
+    >
+      ＋ 参加者を招待
+    </button>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     NEW SOMA MODAL
+========================= -->
+
+<div
+  id="newModal"
+  class="modal hide"
+>
+
+  <div class="modalbox">
+
+    <button
+      class="close"
+      data-close-new
+    >×</button>
+
+    <h2>新しいSOMAを作成</h2>
+
+    <p class="muted">
+      SOMAの名前を入力してください。
+    </p>
+
+    <input
+      id="newSomaName"
+      style="width:100%"
+      value="新商品企画"
+    >
+
+    <div class="modal-actions">
+
+      <button
+        class="secondary"
+        data-close-new
+      >
+        キャンセル
+      </button>
+
+      <button
+        class="primary"
+        data-create-soma
+      >
+        作成する
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+<!-- =========================
+     VIDEO CALL MODAL
+     工程② WebRTC + PeerJS Cloud Signaling（①音声を維持）
+========================= -->
+<div id="voiceCallModal" class="modal hide">
+  <div class="modalbox">
+    <button class="close" data-voice-close>×</button>
+    <h2>🎥 ビデオ通話</h2>
+    <p class="voice-modal-note">工程②検証用。①で成功した音声通話をそのまま土台にし、カメラ映像だけを追加して検証します。既存のSOMA操作・Canvas機能には手を加えません。</p>
+    <div class="video-stage">
+      <div class="video-tile">
+        <span class="video-label">あなた</span>
+        <div class="video-placeholder" id="videoLocalPlaceholder">カメラ準備前</div>
+        <video id="videoLocal" autoplay muted playsinline></video>
+      </div>
+      <div class="video-tile">
+        <span class="video-label">相手</span>
+        <div class="video-placeholder" id="videoRemotePlaceholder">相手の映像を待機中</div>
+        <video id="videoRemote" autoplay playsinline></video>
+      </div>
+    </div>
+    <b>あなたの接続ID</b>
+    <div class="voice-id-box" id="voiceMyId">接続IDを準備中…</div>
+    <label class="label" style="margin-top:0">相手の接続ID
+      <input id="voicePeerId" placeholder="同僚から受け取ったIDを入力">
+    </label>
+    <div class="voice-actions" style="margin-top:12px">
+      <button class="primary" id="voicePrepare">🎙️🎥 マイク・カメラを準備</button>
+      <button class="primary" id="voiceCall" disabled>📞 発信</button>
+      <button class="primary" id="voiceAnswer" disabled>📲 応答</button>
+      <button class="secondary" id="voiceReject" disabled>✕ 拒否</button>
+      <button class="secondary" id="voiceMute" disabled>🔇 ミュート</button>
+      <button class="secondary" id="voiceHangup" disabled>☎ 通話終了</button>
+    </div>
+    <div class="voice-status" id="voiceStatus">通信サービスに接続中…</div>
+    <div class="voice-status" id="canvasSyncStatus">Canvas共有：待機中</div>
+    <div class="voice-call-timer" id="voiceTimer">待機中</div>
+    <audio id="voiceRemoteAudio" autoplay playsinline></audio>
+    <p class="voice-modal-note" style="margin-bottom:0">※ 接続IDの交換はPeerJSのシグナリングサービスを利用します。音声・映像はWebRTCで端末間接続します。</p>
+  </div>
+</div>
+
+
+<!-- =========================
+     OTHER MODAL
+========================= -->
+
+<div
+  id="otherModal"
+  class="modal hide"
+>
+
+  <div class="modalbox">
+
+    <button
+      class="close"
+      data-close-other
+    >×</button>
+
+    <h2>その他</h2>
+
+    <p class="muted">
+      Canvasを邪魔しない便利機能です。
+    </p>
+
+    <div class="grid" style="grid-template-columns:1fr 1fr">
+
+      <button
+        class="secondary"
+        data-other-item="calendar"
+      >
+        📅<br>
+        カレンダー
+      </button>
+
+      <button
+        class="secondary"
+        data-other-item="record"
+      >
+        ●<br>
+        録音・文字起こし
+      </button>
+
+      <button
+        class="secondary"
+        data-other-item="handwriting"
+      >
+        ✎<br>
+        手書き文字変換
+      </button>
+
+      <button
+        class="secondary"
+        data-other-item="calculator"
+      >
+        ＋−×÷<br>
+        計算機
+      </button>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+<!-- =========================
+     TOAST
+========================= -->
+
+<div
+  id="toast"
+  class="toast"
+></div>
+
+
+
+<!-- PeerJS: WebRTCシグナリングを担当。SOMA本体のコードとは独立。 -->
+<script src="https://unpkg.com/peerjs@1.5.5/dist/peerjs.min.js"></script>
+
+<script>
+/* =========================================================
+   SOMA Ver.1
+   Local / Browser Implementation
+========================================================= */
+
+const $ = selector => document.querySelector(selector);
+const $$ = selector => [...document.querySelectorAll(selector)];
+
+
+/* =========================================================
+   APP STATE
+========================================================= */
+
+const STORAGE_KEY = "SOMA_VER1_DATA";
+
+let state = {
+  screen:"start",
+  currentSoma:"新商品企画",
+  currentPage:0,
+  currentTool:"select",
+  currentColor:"#2563eb",
+  penSize:4,
+
+  somas:[
+    {
+      name:"新商品企画",
+      updated:"2026/09/01 14:32",
+      pages:[
+        {
+          name:"新商品アイデア",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    },
+    {
+      name:"プロジェクト会議",
+      updated:"2026/08/31 16:20",
+      pages:[
+        {
+          name:"会議メモ",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    },
+    {
+      name:"授業ノート",
+      updated:"2026/08/30 11:42",
+      pages:[
+        {
+          name:"ノート",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    },
+    {
+      name:"マーケティング戦略",
+      updated:"2026/08/29 18:10",
+      pages:[
+        {
+          name:"戦略",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    },
+    {
+      name:"デザイン案",
+      updated:"2026/08/28 15:05",
+      pages:[
+        {
+          name:"デザイン",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    },
+    {
+      name:"営業資料",
+      updated:"2026/08/27 10:20",
+      pages:[
+        {
+          name:"資料",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    }
+  ],
+
+  history:[],
+
+  profile:{
+    name:"山田 太郎",
+    displayName:"山田 太郎",
+    message:"アイデアをカタチにするのが好きです。",
+    image:null
+  },
+
+  settings:{
+    autosave:true,
+    notice:true,
+    participantNotice:true,
+    penSize:4,
+    canvasBackground:"#ffffff"
+  }
+};
+
+
+/* =========================================================
+   LOAD / SAVE
+========================================================= */
+
+function loadState(){
+
+  try{
+
+    const saved = localStorage.getItem(STORAGE_KEY);
+
+    if(saved){
+
+      const parsed = JSON.parse(saved);
+
+      state = Object.assign(state,parsed);
+
+      if(!Array.isArray(state.somas) || !state.somas.length){
+        state.somas = [];
+      }
+
+    }
+
+  }catch(error){
+
+    console.warn("SOMA data load error",error);
+
+  }
+
+}
+
+
+function saveState(){
+  try{
+    state.somas.forEach(soma=>{
+      if(soma.name===state.currentSoma){
+        soma.updated=new Date().toLocaleString("ja-JP",{year:"numeric",month:"2-digit",day:"2-digit",hour:"2-digit",minute:"2-digit"});
+      }
+    });
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+    const el=$("#saveState");
+    if(el) el.textContent="✓ 自動保存済み";
+    if(state.screen==="canvas" && !somaSyncApplyingRemote){
+      canvasSyncBroadcastCurrentState();
+    }
+  }catch(error){
+    console.warn("SOMA save error",error);
+    const el=$("#saveState");
+    if(el) el.textContent="保存エラー";
+  }
+}
+
+
+/* =========================================================
+   UTIL
+========================================================= */
+
+function toast(message){
+
+  const el = $("#toast");
+
+  el.textContent = message;
+  el.classList.add("show");
+
+  clearTimeout(toast.timer);
+
+  toast.timer = setTimeout(()=>{
+    el.classList.remove("show");
+  },1800);
+
+}
+
+
+function escapeHTML(value){
+
+  return String(value)
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+
+}
+
+
+function getCurrentSoma(){
+
+  let soma = state.somas.find(
+    item=>item.name===state.currentSoma
+  );
+
+  if(!soma){
+
+    soma = {
+      name:state.currentSoma,
+      updated:"今",
+      pages:[
+        {
+          name:"新商品アイデア",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    };
+
+    state.somas.unshift(soma);
+
+  }
+
+  return soma;
+
+}
+
+
+function getCurrentPage(){
+
+  const soma = getCurrentSoma();
+
+  if(!soma.pages.length){
+
+    soma.pages.push({
+      name:"ページ1",
+      drawing:null,
+      objects:[]
+    });
+
+  }
+
+  if(state.currentPage >= soma.pages.length){
+    state.currentPage = soma.pages.length-1;
+  }
+
+  return soma.pages[state.currentPage];
+
+}
+
+
+/* =========================================================
+   SCREEN
+========================================================= */
+
+function showScreen(id){
+
+  $$(".screen").forEach(screen=>{
+    screen.classList.toggle(
+      "on",
+      screen.id===id
+    );
+  });
+
+  $$(".nav button").forEach(button=>{
+    button.classList.toggle(
+      "on",
+      button.dataset.screen===id
+    );
+  });
+
+  state.screen=id;
+
+  localStorage.setItem(
+    "SOMA_LAST_SCREEN",
+    id
+  );
+
+  if(id==="my"){
+    renderMySoma();
+  }
+
+  if(id==="canvas"){
+    renderCanvas();
+  }
+
+  if(id==="history"){
+    renderHistory();
+  }
+
+  if(id==="profile"){
+    renderProfile();
+  }
+
+}
+
+
+$$("[data-screen]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    const id = button.dataset.screen;
+
+    if(id==="canvas"){
+      renderCanvas();
+    }
+
+    showScreen(id);
+
+  });
+
+});
+
+
+/* =========================================================
+   START / NEW SOMA
+========================================================= */
+
+$$("[data-new]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    $("#newModal").classList.remove("hide");
+
+    setTimeout(()=>{
+      $("#newSomaName").focus();
+      $("#newSomaName").select();
+    },50);
+
+  });
+
+});
+
+
+$$("[data-close-new]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+    $("#newModal").classList.add("hide");
+  });
+
+});
+
+
+$("[data-create-soma]").addEventListener("click",()=>{
+
+  let name = $("#newSomaName").value.trim();
+
+  if(!name){
+    name="新しいSOMA";
+  }
+
+  state.currentSoma=name;
+  state.currentPage=0;
+
+  if(!state.somas.some(soma=>soma.name===name)){
+
+    state.somas.unshift({
+      name,
+      updated:"今",
+      pages:[
+        {
+          name:"新商品アイデア",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    });
+
+  }
+
+  $("#canvasName").textContent=name;
+
+  $("#newModal").classList.add("hide");
+
+  saveState();
+
+  showScreen("canvas");
+
+  toast("SOMAを作成しました");
+
+});
+
+
+/* =========================================================
+   JOIN
+========================================================= */
+
+$("[data-join]").addEventListener("click",()=>{
+
+  const code=$("#joinCode").value.trim();
+
+  if(!code){
+
+    toast("招待コードを入力してください");
+
+    $("#joinCode").focus();
+
+    return;
+  }
+
+  toast("招待コードを確認しました");
+
+  state.currentSoma="共有されたSOMA";
+
+  if(!state.somas.some(
+    soma=>soma.name==="共有されたSOMA"
+  )){
+
+    state.somas.unshift({
+      name:"共有されたSOMA",
+      updated:"今",
+      pages:[
+        {
+          name:"共有ページ",
+          drawing:null,
+          objects:[]
+        }
+      ]
+    });
+
+  }
+
+  showScreen("my");
+
+});
+
+
+$("[data-invite-link]").addEventListener("click",event=>{
+
+  event.preventDefault();
+
+  $("#participantModal").classList.remove("hide");
+
+});
+
+
+/* =========================================================
+   MY SOMA
+========================================================= */
+
+function renderMySoma(){
+
+  const container=$("#cards");
+
+  container.innerHTML="";
+
+  state.somas.forEach((soma,index)=>{
+
+    const article=document.createElement("article");
+
+    article.className="card";
+
+    article.innerHTML=`
+      <div class="thumb">
+        ${escapeHTML(soma.name)}
+      </div>
+
+      <b>${escapeHTML(soma.name)}</b>
+
+      <small>
+        最終更新：${escapeHTML(soma.updated || "今")}
+       　● 参加者
+      </small>
+    `;
+
+    article.addEventListener("click",()=>{
+
+      state.currentSoma=soma.name;
+      state.currentPage=0;
+
+      showScreen("canvas");
+
+    });
+
+    container.appendChild(article);
+
+  });
+
+}
+
+
+$("#search").addEventListener("input",event=>{
+
+  const keyword=event.target.value.toLowerCase();
+
+  $$("#cards .card").forEach(card=>{
+
+    card.style.display=
+      card.textContent.toLowerCase().includes(keyword)
+      ? ""
+      : "none";
+
+  });
+
+});
+
+
+/* =========================================================
+   CANVAS ENGINE
+========================================================= */
+
+const canvas=$("#board");
+const ctx=canvas.getContext("2d");
+const objectLayer=$("#objectLayer");
+
+let drawing=false;
+let lastX=0;
+let lastY=0;
+
+let undoStack=[];
+let redoStack=[];
+
+let selectedObjectId=null;
+let activeObject=null;
+
+let dragInfo=null;
+let resizeInfo=null;
+
+
+/* =========================================================
+   CANVAS BACKGROUND
+========================================================= */
+
+function drawCanvasBackground(){
+
+  const page=getCurrentPage();
+
+  ctx.clearRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  ctx.fillStyle=
+    state.settings.canvasBackground || "#ffffff";
+
+  ctx.fillRect(
+    0,
+    0,
+    canvas.width,
+    canvas.height
+  );
+
+  ctx.strokeStyle="#edf1f5";
+  ctx.lineWidth=1;
+
+  for(let x=20;x<canvas.width;x+=32){
+
+    ctx.beginPath();
+    ctx.moveTo(x,0);
+    ctx.lineTo(x,canvas.height);
+    ctx.stroke();
+
+  }
+
+  for(let y=20;y<canvas.height;y+=32){
+
+    ctx.beginPath();
+    ctx.moveTo(0,y);
+    ctx.lineTo(canvas.width,y);
+    ctx.stroke();
+
+  }
+
+  if(page.drawing){
+
+    const image=new Image();
+
+    image.onload=()=>{
+
+      ctx.drawImage(
+        image,
+        0,
+        0
+      );
+
+    };
+
+    image.src=page.drawing;
+
+  }
+
+}
+
+
+function renderDemoContent(){
+
+  const page=getCurrentPage();
+
+  if(
+    page.objects.length===0 &&
+    !page.drawing
+  ){
+
+    const demoCanvas=document.createElement("canvas");
+
+    demoCanvas.width=canvas.width;
+    demoCanvas.height=canvas.height;
+
+    const d=demoCanvas.getContext("2d");
+
+    d.fillStyle="#fff";
+    d.fillRect(
+      0,
+      0,
+      demoCanvas.width,
+      demoCanvas.height
+    );
+
+    d.strokeStyle="#edf1f5";
+    d.lineWidth=1;
+
+    for(let x=20;x<demoCanvas.width;x+=32){
+
+      d.beginPath();
+      d.moveTo(x,0);
+      d.lineTo(x,demoCanvas.height);
+      d.stroke();
+
+    }
+
+    for(let y=20;y<demoCanvas.height;y+=32){
+
+      d.beginPath();
+      d.moveTo(0,y);
+      d.lineTo(demoCanvas.width,y);
+      d.stroke();
+
+    }
+
+    d.fillStyle="#172033";
+    d.font="700 34px sans-serif";
+    d.fillText(
+      "新商品コンセプト",
+      70,
+      90
+    );
+
+    d.fillStyle="#2563eb";
+    d.font="600 24px sans-serif";
+    d.fillText(
+      "シンプルで使いやすい",
+      90,
+      180
+    );
+
+    d.fillStyle="#19b98a";
+    d.fillText(
+      "コストパフォーマンス",
+      1000,
+      190
+    );
+
+    d.fillStyle="#fef3c7";
+    d.fillRect(
+      90,
+      390,
+      270,
+      140
+    );
+
+    d.fillStyle="#92400e";
+    d.font="600 22px sans-serif";
+    d.fillText(
+      "ターゲット",
+      115,
+      435
+    );
+
+    d.font="19px sans-serif";
+    d.fillText(
+      "20〜30代 男女",
+      115,
+      475
+    );
+
+    d.strokeStyle="#334155";
+    d.lineWidth=3;
+    d.strokeRect(
+      520,
+      470,
+      570,
+      150
+    );
+
+    d.fillStyle="#172033";
+    d.font="700 24px sans-serif";
+    d.fillText(
+      "すべての人にとって価値のある商品",
+      555,
+      555
+    );
+
+    page.drawing=demoCanvas.toDataURL();
+
+  }
+
+}
+
+
+/* =========================================================
+   CANVAS RENDER
+========================================================= */
+
+function renderCanvas(){
+
+  const soma=getCurrentSoma();
+
+  $("#canvasName").textContent=soma.name;
+
+  drawCanvasBackground();
+
+  renderDemoContent();
+
+  drawCanvasBackground();
+
+  renderObjects();
+
+  renderPages();
+
+  updatePageLabel();
+
+  updateToolButtons();
+
+}
+
+
+function updatePageLabel(){
+
+  const soma=getCurrentSoma();
+
+  $("#pageLabel").textContent=
+    `ページ ${state.currentPage+1} / ${soma.pages.length}`;
+
+}
+
+
+function renderObjects(){
+
+  objectLayer.innerHTML="";
+
+  const page=getCurrentPage();
+
+  page.objects.forEach(object=>{
+
+    createObjectElement(object);
+
+  });
+
+}
+
+
+function createObjectElement(object){
+
+  const el=document.createElement("div");
+
+  el.className=
+    "canvas-object "+
+    object.type+"-object";
+
+  el.dataset.id=object.id;
+
+  el.style.left=object.x+"px";
+  el.style.top=object.y+"px";
+
+  if(object.width){
+    el.style.width=object.width+"px";
+  }
+
+  if(object.height){
+    el.style.height=object.height+"px";
+  }
+
+  if(object.color){
+    el.style.color=object.color;
+  }
+
+  if(object.type==="text"){
+
+    el.textContent=object.text || "テキスト";
+
+    el.style.fontSize=
+      (object.fontSize||24)+"px";
+
+    el.style.fontWeight=
+      object.bold ? "700" : "500";
+
+  }
+
+
+  if(object.type==="shape"){
+    if(object.shape==="rect") el.classList.add("shape-rect");
+    if(object.shape==="roundrect") el.classList.add("shape-roundrect");
+    if(object.shape==="circle") el.classList.add("shape-circle");
+    if(object.shape==="diamond") el.classList.add("shape-diamond");
+    if(object.shape==="arrow"){
+      el.classList.add("shape-arrow");
+      el.style.background=object.color||state.currentColor;
+      el.style.transform=`rotate(${object.rotation||0}deg)`;
+    }
+    if(object.shape==="line"){
+      el.classList.add("shape-line");
+      el.style.background=object.color||state.currentColor;
+      el.style.transform=`rotate(${object.rotation||0}deg)`;
+    }
+    if(!["arrow","line"].includes(object.shape)) el.style.borderColor=object.color||state.currentColor;
+  }
+
+
+  if(object.type==="image"){
+
+    const img=document.createElement("img");
+
+    img.src=object.src;
+
+    el.appendChild(img);
+
+  }
+
+
+  if(object.type==="tab"){
+
+    el.innerHTML=`
+      <div class="tab-title">
+        ${escapeHTML(object.title||"TAB")}
+      </div>
+      <div class="tab-body">
+        ${escapeHTML(object.body||"メモを入力してください")}
+      </div>
+    `;
+
+    el.style.borderColor=
+      object.color||state.currentColor;
+
+    el.style.backgroundColor=
+      object.tabColor||"#EAF2FF";
+
+  }
+
+
+  if(
+    selectedObjectId===object.id &&
+    object.type!=="text"
+  ){
+
+    el.classList.add("selected");
+
+  }
+
+  if(selectedObjectId===object.id){
+
+    el.classList.add("selected");
+
+    const handle=document.createElement("span");
+
+    handle.className="resize-handle";
+
+    handle.addEventListener(
+      "pointerdown",
+      startResize
+    );
+
+    el.appendChild(handle);
+
+  }
+
+
+  el.addEventListener(
+    "pointerdown",
+    startObjectDrag
+  );
+
+  el.addEventListener(
+    "dblclick",
+    editObject
+  );
+
+  objectLayer.appendChild(el);
+
+}
+
+
+function updateToolButtons(){
+  $$('[data-tool]').forEach(button=>{
+    button.classList.toggle('on',button.dataset.tool===state.currentTool);
+  });
+}
+
+
+$$('[data-tool]').forEach(button=>{
+  button.addEventListener('click',()=>{
+    const tool=button.dataset.tool;
+    if(tool==='shape'){
+      state.currentTool='shape';
+      updateToolButtons();
+      $('#shapePalette')?.classList.toggle('show');
+      return;
+    }
+    $('#shapePalette')?.classList.remove('show');
+    state.currentTool=tool;
+    updateToolButtons();
+    if(tool==='text') createTextObject();
+    if(tool==='image') openImagePicker();
+    if(tool==='tab') createTabObject();
+  });
+});
+
+$$('[data-shape]').forEach(button=>{
+  button.addEventListener('click',()=>createShapeObject(button.dataset.shape));
+});
+
+document.addEventListener('click',event=>{
+  if(!event.target.closest('#shapePalette')&&!event.target.closest('[data-tool="shape"]')){
+    $('#shapePalette')?.classList.remove('show');
+  }
+});
+
+
+/* =========================================================
+   PEN / ERASER DRAWING - 工程③ Canvas共有
+========================================================= */
+
+function canvasPointFromEvent(event){
+  const rect=canvas.getBoundingClientRect();
+  return {
+    x:(event.clientX-rect.left)*(canvas.width/rect.width),
+    y:(event.clientY-rect.top)*(canvas.height/rect.height)
+  };
+}
+
+function drawCanvasStroke(x1,y1,x2,y2,color,size,eraser=false){
+  ctx.save();
+  ctx.lineCap="round";
+  ctx.lineJoin="round";
+  ctx.lineWidth=size||4;
+  ctx.strokeStyle=eraser
+    ? (state.settings.canvasBackground || "#ffffff")
+    : (color || state.currentColor || "#2563eb");
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+  ctx.restore();
+}
+
+function finishCanvasStroke(){
+  if(!drawing) return;
+  drawing=false;
+  const page=getCurrentPage();
+  page.drawing=canvas.toDataURL("image/png");
+  saveState();
+  addHistory(state.currentTool==="eraser" ? "Canvasを消去" : "Canvasに描画");
+}
+
+canvas.addEventListener("pointerdown",event=>{
+  if(state.currentTool!=="pen" && state.currentTool!=="eraser") return;
+  event.preventDefault();
+  snapshot();
+  drawing=true;
+  const point=canvasPointFromEvent(event);
+  lastX=point.x;
+  lastY=point.y;
+  canvas.setPointerCapture?.(event.pointerId);
+});
+
+canvas.addEventListener("pointermove",event=>{
+  if(!drawing) return;
+  event.preventDefault();
+  const point=canvasPointFromEvent(event);
+  const eraser=state.currentTool==="eraser";
+  const size=eraser ? Math.max(18,state.settings.penSize*4) : state.settings.penSize;
+  drawCanvasStroke(lastX,lastY,point.x,point.y,state.currentColor,size,eraser);
+
+  canvasSyncSend({
+    type:"canvas-stroke",
+    pageIndex:state.currentPage,
+    x1:lastX,
+    y1:lastY,
+    x2:point.x,
+    y2:point.y,
+    color:state.currentColor,
+    size,
+    eraser
+  });
+
+  lastX=point.x;
+  lastY=point.y;
+});
+
+canvas.addEventListener("pointerup",finishCanvasStroke);
+canvas.addEventListener("pointercancel",finishCanvasStroke);
+
+
+/* =========================================================
+   SELECTION
+========================================================= */
+
+function findObject(id){
+
+  return getCurrentPage().objects.find(
+    object=>object.id===id
+  );
+
+}
+
+
+function startObjectDrag(event){
+
+  if(event.target.classList.contains("resize-handle")){
+    return;
+  }
+
+  const el=event.currentTarget;
+
+  const id=el.dataset.id;
+
+  const object=findObject(id);
+
+  if(!object){
+    return;
+  }
+
+  if(state.currentTool!=="select"){
+    return;
+  }
+
+  event.stopPropagation();
+
+  snapshot();
+
+  selectedObjectId=id;
+
+  activeObject=object;
+
+  const start={
+    x:event.clientX,
+    y:event.clientY,
+    ox:object.x,
+    oy:object.y
+  };
+
+  dragInfo={
+    object,
+    start
+  };
+
+  el.setPointerCapture?.(event.pointerId);
+
+  function move(ev){
+
+    if(!dragInfo){
+      return;
+    }
+
+    object.x=
+      start.ox+
+      ev.clientX-start.x;
+
+    object.y=
+      start.oy+
+      ev.clientY-start.y;
+
+    el.style.left=object.x+"px";
+    el.style.top=object.y+"px";
+
+  }
+
+  function up(){
+
+    document.removeEventListener(
+      "pointermove",
+      move
+    );
+
+    document.removeEventListener(
+      "pointerup",
+      up
+    );
+
+    dragInfo=null;
+
+    saveState();
+
+    addHistory("オブジェクトを移動");
+
+    renderObjects();
+
+  }
+
+  document.addEventListener(
+    "pointermove",
+    move
+  );
+
+  document.addEventListener(
+    "pointerup",
+    up
+  );
+
+}
+
+
+function startResize(event){
+
+  event.stopPropagation();
+
+  const el=event.currentTarget.parentElement;
+
+  const id=el.dataset.id;
+
+  const object=findObject(id);
+
+  if(!object){
+    return;
+  }
+
+  snapshot();
+
+  const startX=event.clientX;
+  const startY=event.clientY;
+
+  const startW=object.width||120;
+  const startH=object.height||80;
+
+  function move(ev){
+
+    object.width=Math.max(
+      40,
+      startW+(ev.clientX-startX)
+    );
+
+    if(object.type==="shape" && (object.shape==="arrow" || object.shape==="line")){
+      object.height=3;
+    }else{
+      object.height=Math.max(35,startH+(ev.clientY-startY));
+    }
+
+    el.style.width=object.width+"px";
+    el.style.height=object.height+"px";
+
+  }
+
+  function up(){
+
+    document.removeEventListener(
+      "pointermove",
+      move
+    );
+
+    document.removeEventListener(
+      "pointerup",
+      up
+    );
+
+    saveState();
+
+    addHistory("オブジェクトのサイズを変更");
+
+    renderObjects();
+
+  }
+
+  document.addEventListener(
+    "pointermove",
+    move
+  );
+
+  document.addEventListener(
+    "pointerup",
+    up
+  );
+
+}
+
+
+/* =========================================================
+   TEXT
+========================================================= */
+
+function createTextObject(){
+
+  const text=prompt(
+    "Canvasに入力する文字",
+    "ここに文字を入力"
+  );
+
+  if(text===null || !text.trim()){
+    state.currentTool="select";
+    updateToolButtons();
+    return;
+  }
+
+  snapshot();
+
+  const object={
+    id:newId(),
+    type:"text",
+    x:150,
+    y:150,
+    width:260,
+    height:60,
+    text:text.trim(),
+    color:state.currentColor,
+    fontSize:24
+  };
+
+  getCurrentPage().objects.push(object);
+
+  selectedObjectId=object.id;
+
+  saveState();
+
+  renderObjects();
+
+  state.currentTool="select";
+
+  updateToolButtons();
+
+  addHistory("文字を追加");
+
+}
+
+
+function editObject(event){
+
+  const id=event.currentTarget.dataset.id;
+
+  const object=findObject(id);
+
+  if(!object){
+    return;
+  }
+
+  if(object.type==="text"){
+
+    const text=prompt(
+      "文字を編集",
+      object.text
+    );
+
+    if(text!==null){
+
+      snapshot();
+
+      object.text=text;
+
+      saveState();
+
+      renderObjects();
+
+      addHistory("文字を編集");
+
+    }
+
+  }
+
+  if(object.type==="tab"){
+
+    const title=prompt(
+      "TABタイトル",
+      object.title
+    );
+
+    if(title===null){
+      return;
+    }
+
+    const body=prompt(
+      "TAB内容",
+      object.body
+    );
+
+    if(body===null){
+      return;
+    }
+
+    snapshot();
+
+    object.title=title;
+    object.body=body;
+
+    saveState();
+
+    renderObjects();
+
+    addHistory("TABを編集");
+
+  }
+
+}
+
+
+/* =========================================================
+   SHAPE
+========================================================= */
+
+function createShapeObject(shape="rect"){
+  snapshot();
+  const object={id:newId(),type:"shape",shape,x:430,y:230,width:220,height:130,color:state.currentColor,rotation:0};
+  if(shape==="arrow"||shape==="line") object.height=3;
+  getCurrentPage().objects.push(object);
+  selectedObjectId=object.id;
+  saveState();
+  renderObjects();
+  state.currentTool="select";
+  updateToolButtons();
+  $("#shapePalette")?.classList.remove("show");
+  addHistory("図形を追加");
+}
+
+
+/* =========================================================
+   IMAGE
+========================================================= */
+
+let imageInput=null;
+
+function openImagePicker(){
+
+  if(!imageInput){
+
+    imageInput=document.createElement("input");
+
+    imageInput.type="file";
+    imageInput.accept="image/*";
+    imageInput.style.display="none";
+
+    document.body.appendChild(imageInput);
+
+    imageInput.addEventListener(
+      "change",
+      handleImage
+    );
+
+  }
+
+  imageInput.value="";
+  imageInput.click();
+
+}
+
+
+function handleImage(event){
+
+  const file=event.target.files[0];
+
+  if(!file){
+    return;
+  }
+
+  const reader=new FileReader();
+
+  reader.onload=()=>{
+
+    snapshot();
+
+    const object={
+      id:newId(),
+      type:"image",
+      x:300,
+      y:250,
+      width:280,
+      height:210,
+      src:reader.result
+    };
+
+    getCurrentPage().objects.push(object);
+
+    selectedObjectId=object.id;
+
+    saveState();
+
+    renderObjects();
+
+    state.currentTool="select";
+
+    updateToolButtons();
+
+    addHistory("画像を追加");
+
+  };
+
+  reader.readAsDataURL(file);
+
+}
+
+
+/* =========================================================
+   TAB
+========================================================= */
+
+function createTabObject(){
+
+  const title=prompt(
+    "TABタイトル",
+    "アイデア"
+  );
+
+  if(title===null){
+    state.currentTool="select";
+    updateToolButtons();
+    return;
+  }
+
+  const body=prompt(
+    "TAB内容",
+    "ここに内容を入力"
+  );
+
+  if(body===null){
+    state.currentTool="select";
+    updateToolButtons();
+    return;
+  }
+
+  snapshot();
+
+  const object={
+    id:newId(),
+    type:"tab",
+    x:600,
+    y:260,
+    width:280,
+    height:150,
+    title:title||"TAB",
+    body:body||"",
+    color:state.currentColor,
+    tabColor:"#EAF2FF"
+  };
+
+  getCurrentPage().objects.push(object);
+
+  selectedObjectId=object.id;
+
+  saveState();
+
+  renderObjects();
+
+  state.currentTool="select";
+
+  updateToolButtons();
+
+  addHistory("TABを追加");
+
+}
+
+
+/* =========================================================
+   DELETE SELECTED
+========================================================= */
+
+document.addEventListener(
+  "keydown",
+  event=>{
+
+    if(
+      event.key==="Delete" ||
+      event.key==="Backspace"
+    ){
+
+      const active=document.activeElement;
+
+      if(
+        active &&
+        (
+          active.tagName==="INPUT" ||
+          active.tagName==="TEXTAREA"
+        )
+      ){
+        return;
+      }
+
+      if(selectedObjectId){
+
+        const page=getCurrentPage();
+
+        const index=page.objects.findIndex(
+          object=>object.id===selectedObjectId
+        );
+
+        if(index>=0){
+
+          snapshot();
+
+          page.objects.splice(index,1);
+
+          selectedObjectId=null;
+
+          saveState();
+
+          renderObjects();
+
+          addHistory("オブジェクトを削除");
+
+        }
+
+      }
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   COLOR
+========================================================= */
+
+$$("[data-color]").forEach(dot=>{
+
+  dot.addEventListener("click",()=>{
+
+    state.currentColor=
+      dot.dataset.color;
+
+    if(selectedObjectId){
+
+      const object=findObject(
+        selectedObjectId
+      );
+
+      if(object){
+
+        snapshot();
+
+        object.color=
+          state.currentColor;
+
+        saveState();
+
+        renderObjects();
+
+        addHistory("カラーを変更");
+
+      }
+
+    }else{
+
+      state.currentTool="pen";
+
+      updateToolButtons();
+
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   CLEAR
+========================================================= */
+
+$("[data-clear]").addEventListener(
+  "click",
+  ()=>{
+
+    if(!confirm("Canvasをクリアしますか？")){
+      return;
+    }
+
+    snapshot();
+
+    const page=getCurrentPage();
+
+    page.drawing=null;
+    page.objects=[];
+
+    selectedObjectId=null;
+
+    drawCanvasBackground();
+
+    saveState();
+
+    renderObjects();
+
+    addHistory("Canvasをクリア");
+
+    toast("Canvasをクリアしました");
+
+  }
+);
+
+
+/* =========================================================
+   PAGES
+========================================================= */
+
+function renderPages(){
+
+  const soma=getCurrentSoma();
+
+  const list=$("#pageList");
+
+  list.innerHTML="";
+
+  soma.pages.forEach((page,index)=>{
+
+    const div=document.createElement("div");
+
+    div.className=
+      "page-preview "+
+      (index===state.currentPage ? "on":"");
+
+    div.innerHTML=`
+      <div>
+        <b>ページ ${index+1}</b>
+        <small>${escapeHTML(page.name)}</small>
+      </div>
+    `;
+
+    div.addEventListener(
+      "click",
+      ()=>{
+
+        state.currentPage=index;
+        selectedObjectId=null;
+        undoStack=[];
+        redoStack=[];
+        renderCanvas();
+
+        saveState();
+
+      }
+    );
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+$("[data-add-page]").addEventListener(
+  "click",
+  ()=>{
+
+    const soma=getCurrentSoma();
+
+    const name=prompt(
+      "ページ名",
+      `ページ ${soma.pages.length+1}`
+    );
+
+    if(name===null){
+      return;
+    }
+
+    soma.pages.push({
+      name:name.trim() || `ページ ${soma.pages.length+1}`,
+      drawing:null,
+      objects:[]
+    });
+
+    state.currentPage=soma.pages.length-1;
+
+    saveState();
+
+    renderCanvas();
+
+    addHistory("新しいページを追加");
+
+  }
+);
+
+
+/* =========================================================
+   RIGHT PANEL TABS
+========================================================= */
+
+$$("[data-right-tab]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    $$("[data-right-tab]").forEach(
+      item=>item.classList.remove("on")
+    );
+
+    button.classList.add("on");
+
+    const isPages=
+      button.dataset.rightTab==="pages";
+
+    $("#pagesPanel").style.display=
+      isPages ? "" : "none";
+
+    $("#participantsPanel").style.display=
+      isPages ? "none" : "block";
+
+  });
+
+});
+
+
+/* =========================================================
+   PARTICIPANTS
+========================================================= */
+
+function openParticipants(){
+
+  $("#participantModal")
+    .classList.remove("hide");
+
+}
+
+
+$$("[data-participants]").forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    openParticipants
+  );
+
+});
+
+
+$("[data-close-modal]").addEventListener(
+  "click",
+  ()=>{
+    $("#participantModal")
+      .classList.add("hide");
+  }
+);
+
+
+$("[data-generate-invite]").addEventListener(
+  "click",
+  ()=>{
+
+    const code=
+      Math.random()
+      .toString(36)
+      .substring(2,8)
+      .toUpperCase();
+
+    const modal=$("#participantModal");
+
+    modal.querySelector(".modalbox").innerHTML=`
+
+      <button
+        class="close"
+        data-close-generated
+      >×</button>
+
+      <h2>参加者を招待</h2>
+
+      <p class="muted">
+        このコードを参加者へ共有してください。
+      </p>
+
+      <div class="invite-code">
+        ${code}
+      </div>
+
+      <button
+        class="primary full"
+        id="copyInvite"
+      >
+        招待コードをコピー
+      </button>
+
+    `;
+
+    $("[data-close-generated]").addEventListener(
+      "click",
+      ()=>{
+        $("#participantModal")
+          .classList.add("hide");
+      }
+    );
+
+    $("#copyInvite").addEventListener(
+      "click",
+      async()=>{
+
+        try{
+
+          await navigator.clipboard.writeText(code);
+
+          toast("招待コードをコピーしました");
+
+        }catch{
+
+          toast(`招待コード：${code}`);
+
+        }
+
+      }
+    );
+
+  }
+);
+
+
+/* =========================================================
+   OTHER
+========================================================= */
+
+$("[data-other]").addEventListener(
+  "click",
+  ()=>{
+    $("#otherModal").classList.remove("hide");
+  }
+);
+
+
+$("[data-close-other]").addEventListener(
+  "click",
+  ()=>{
+    $("#otherModal").classList.add("hide");
+  }
+);
+
+
+$$("[data-other-item]").forEach(button=>{
+
+  button.addEventListener("click",()=>{
+
+    const type=button.dataset.otherItem;
+
+    $("#otherModal").classList.add("hide");
+
+    if(type==="calculator"){
+
+      toast("右側の計算機を利用できます");
+
+      return;
+
+    }
+
+    if(type==="calendar"){
+
+      alert(
+        "カレンダー機能\n\nVer.1ではCanvas作業を邪魔しない補助機能として配置しています。"
+      );
+
+      return;
+
+    }
+
+    if(type==="record"){
+
+      alert(
+        "録音・文字起こし\n\n音声入力・文字起こし機能はネットワーク／ブラウザAPI連携段階で接続します。"
+      );
+
+      return;
+
+    }
+
+    if(type==="handwriting"){
+
+      alert(
+        "手書き文字変換\n\n画像認識機能は外部AI連携段階で接続します。"
+      );
+
+    }
+
+  });
+
+});
+
+
+/* =========================================================
+   CALCULATOR
+========================================================= */
+
+let calcExpression="";
+
+const calcDisplay=$("#calcDisplay");
+const calcResult=$("#calcResult");
+
+
+function updateCalculator(){
+
+  calcDisplay.value=
+    calcExpression;
+
+}
+
+
+function safeCalculate(expression){
+
+  if(!expression){
+    return "";
+  }
+
+  let normalized=
+    expression
+      .replaceAll("×","*")
+      .replaceAll("÷","/")
+      .replace(/(\d+(?:\.\d+)?)%/g,"($1/100)");
+
+  if(!/^[0-9+\-*/().\s]+$/.test(normalized)){
+    throw new Error("invalid");
+  }
+
+  return Function(
+    `"use strict";return (${normalized})`
+  )();
+
+}
+
+
+$$("[data-calc]").forEach(button=>{
+
+  button.addEventListener(
+    "click",
+    ()=>{
+
+      const value=button.dataset.calc;
+
+      if(value==="C"){
+
+        calcExpression="";
+        calcResult.textContent="";
+        updateCalculator();
+
+        return;
+
+      }
+
+      if(value==="back"){
+
+        calcExpression=
+          calcExpression.slice(0,-1);
+
+        updateCalculator();
+
+        return;
+
+      }
+
+      if(value==="%"){
+
+        if(calcExpression){
+
+          calcExpression+="%";
+
+          updateCalculator();
+
+        }
+
+        return;
+
+      }
+
+      if(value==="="){
+
+        try{
+
+          const result=
+            safeCalculate(calcExpression);
+
+          calcResult.textContent=
+            result===undefined
+              ? ""
+              : "= "+result;
+
+          calcExpression=
+            String(result);
+
+          updateCalculator();
+
+        }catch{
+
+          calcResult.textContent=
+            "計算できません";
+
+        }
+
+        return;
+
+      }
+
+      calcExpression+=value;
+
+      updateCalculator();
+
+  });
+
+});
+
+
+/* =========================================================
+   PDF / PNG / SHARE
+========================================================= */
+
+$("[data-print]").addEventListener(
+  "click",
+  ()=>{
+    window.print();
+  }
+);
+
+
+$("[data-export-png]").addEventListener(
+  "click",
+  ()=>{
+
+    const page=getCurrentPage();
+
+    const exportCanvas=document.createElement("canvas");
+
+    exportCanvas.width=canvas.width;
+    exportCanvas.height=canvas.height;
+
+    const ec=exportCanvas.getContext("2d");
+
+    ec.drawImage(
+      canvas,
+      0,
+      0
+    );
+
+    page.objects.forEach(object=>{
+
+      if(object.type==="text"){
+
+        ec.fillStyle=
+          object.color||"#172033";
+
+        ec.font=
+          `${object.bold?"700":"500"} ${object.fontSize||24}px sans-serif`;
+
+        ec.fillText(
+          object.text,
+          object.x,
+          object.y+(object.fontSize||24)
+        );
+
+      }
+
+      if(object.type==="shape"){
+
+        ec.strokeStyle=
+          object.color||state.currentColor;
+
+        ec.lineWidth=3;
+
+        if(object.shape==="rect"){
+
+          ec.strokeRect(
+            object.x,
+            object.y,
+            object.width,
+            object.height
+          );
+
+        }
+
+        if(object.shape==="circle"){
+
+          ec.beginPath();
+
+          ec.ellipse(
+            object.x+object.width/2,
+            object.y+object.height/2,
+            object.width/2,
+            object.height/2,
+            0,
+            0,
+            Math.PI*2
+          );
+
+          ec.stroke();
+
+        }
+
+      }
+
+      if(object.type==="image"){
+
+        const img=new Image();
+
+        img.onload=()=>{
+
+          ec.drawImage(
+            img,
+            object.x,
+            object.y,
+            object.width,
+            object.height
+          );
+
+          downloadCanvas(
+            exportCanvas,
+            state.currentSoma
+          );
+
+        };
+
+        img.src=object.src;
+
+        return;
+
+      }
+
+    });
+
+    if(
+      !page.objects.some(
+        object=>object.type==="image"
+      )
+    ){
+
+      downloadCanvas(
+        exportCanvas,
+        state.currentSoma
+      );
+
+    }
+
+  }
+);
+
+
+function downloadCanvas(exportCanvas,name){
+
+  const link=document.createElement("a");
+
+  link.download=
+    `${name}_SOMA.png`;
+
+  link.href=
+    exportCanvas.toDataURL("image/png");
+
+  link.click();
+
+  toast("PNGを書き出しました");
+
+}
+
+
+$("[data-share]").addEventListener(
+  "click",
+  async()=>{
+
+    const text=
+      `SOMA「${state.currentSoma}」を共有`;
+
+    try{
+
+      await navigator.clipboard.writeText(
+        location.href
+      );
+
+      toast("共有リンクをコピーしました");
+
+    }catch{
+
+      toast(text);
+
+    }
+
+  }
+);
+
+
+/* =========================================================
+   HISTORY
+========================================================= */
+
+function addHistory(action){
+
+  state.history.unshift({
+
+    id:newId(),
+
+    soma:state.currentSoma,
+
+    page:state.currentPage,
+
+    action,
+
+    time:new Date().toLocaleString(
+      "ja-JP",
+      {
+        year:"numeric",
+        month:"2-digit",
+        day:"2-digit",
+        hour:"2-digit",
+        minute:"2-digit"
+      }
+    )
+
+  });
+
+  if(state.history.length>50){
+
+    state.history=
+      state.history.slice(0,50);
+
+  }
+
+  saveState();
+
+}
+
+
+function renderHistory(){
+
+  const list=$("#historyList");
+
+  list.innerHTML="";
+
+  if(!state.history.length){
+
+    list.innerHTML=`
+      <div class="historyitem active">
+        <b>現在の状態</b>
+        <small>まだ変更履歴はありません</small>
+      </div>
+    `;
+
+    return;
+
+  }
+
+  state.history.forEach((item,index)=>{
+
+    const div=document.createElement("div");
+
+    div.className=
+      "historyitem "+
+      (index===0 ? "active":"");
+
+    div.innerHTML=`
+      <b>${escapeHTML(item.action)}</b>
+      <small>
+        ${escapeHTML(item.time)}
+      </small>
+    `;
+
+    div.addEventListener(
+      "click",
+      ()=>{
+
+        if(
+          item.soma &&
+          state.somas.some(
+            soma=>soma.name===item.soma
+          )
+        ){
+
+          state.currentSoma=item.soma;
+          state.currentPage=item.page||0;
+
+          showScreen("canvas");
+
+        }
+
+      }
+    );
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* =========================================================
+   PROFILE
+========================================================= */
+
+function renderProfile(){
+
+  $("#profileName").value=
+    state.profile.name;
+
+  $("#profileDisplayName").value=
+    state.profile.displayName;
+
+  $("#profileMessage").value=
+    state.profile.message;
+
+  $("#profilePreviewName").textContent=state.profile.displayName||state.profile.name;
+  $("#profilePreviewMessage").textContent=state.profile.message||"";
+  const previewAvatar=$("#profilePreviewAvatar");
+  if(previewAvatar){
+    previewAvatar.textContent=state.profile.image ? "" : state.profile.name.slice(0,2);
+    previewAvatar.style.backgroundImage=state.profile.image ? `url(${state.profile.image})` : "";
+    previewAvatar.style.backgroundSize="cover";
+  }
+
+  if(state.profile.image){
+
+    $("#profilePic").style.backgroundImage=
+      `url(${state.profile.image})`;
+
+    $("#profilePic").style.backgroundSize=
+      "cover";
+
+    $("#profilePic").textContent="";
+
+  }else{
+
+    $("#profilePic").style.backgroundImage="";
+
+    $("#profilePic").textContent=
+      state.profile.name.slice(0,2);
+
+  }
+
+}
+
+
+$("[data-profile-save]").addEventListener(
+  "click",
+  ()=>{
+
+    state.profile.name=
+      $("#profileName").value.trim() ||
+      "山田 太郎";
+
+    state.profile.displayName=
+      $("#profileDisplayName").value.trim() ||
+      state.profile.name;
+
+    state.profile.message=
+      $("#profileMessage").value;
+
+    $("#userName").textContent=state.profile.displayName;
+    $("#userName").previousElementSibling.textContent=state.profile.name.slice(0,1);
+    renderProfile();
+    saveState();
+
+    toast("プロフィールを保存しました");
+
+  }
+);
+
+
+$("[data-profile-image]").addEventListener(
+  "click",
+  ()=>{
+    $("#profileImageInput").click();
+  }
+);
+
+
+$("#profileImageInput").addEventListener(
+  "change",
+  event=>{
+
+    const file=event.target.files[0];
+
+    if(!file){
+      return;
+    }
+
+    const reader=new FileReader();
+
+    reader.onload=()=>{
+
+      state.profile.image=
+        reader.result;
+
+      renderProfile();
+
+      saveState();
+
+    };
+
+    reader.readAsDataURL(file);
+
+  }
+);
+
+
+/* =========================================================
+   SETTINGS
+========================================================= */
+
+$$("[data-setting]").forEach(input=>{
+
+  input.addEventListener(
+    "change",
+    ()=>{
+
+      state.settings[
+        input.dataset.setting
+      ]=input.checked;
+
+      saveState();
+
+    }
+  );
+
+});
+
+
+$("#penSize").addEventListener(
+  "input",
+  event=>{
+
+    state.settings.penSize=
+      Number(event.target.value);
+
+    saveState();
+
+  }
+);
+
+
+$("#canvasBackground").addEventListener(
+  "change",
+  event=>{
+
+    state.settings.canvasBackground=
+      event.target.value;
+
+    if(state.screen==="canvas"){
+
+      drawCanvasBackground();
+
+      renderObjects();
+
+    }
+
+    saveState();
+
+  }
+);
+
+
+/* =========================================================
+   TRASH / HELP
+========================================================= */
+
+$("[data-trash]").addEventListener(
+  "click",
+  ()=>{
+    alert(
+      "ゴミ箱\n\n削除したSOMAを管理する場所です。"
+    );
+  }
+);
+
+
+$("[data-help]").addEventListener(
+  "click",
+  ()=>{
+    alert(
+      "SOMA Help\n\n必要なものは見える。\n必要でないものは隠す。\n\nCanvasを中心に、一緒に考え、確認するための共同キャンバスです。"
+    );
+  }
+);
+
+
+/* =========================================================
+   MODAL BACKGROUND CLOSE
+========================================================= */
+
+$$(".modal").forEach(modal=>{
+
+  modal.addEventListener(
+    "click",
+    event=>{
+
+      if(event.target===modal){
+
+        modal.classList.add("hide");
+
+      }
+
+    }
+  );
+
+});
+
+
+/* =========================================================
+   INIT
+========================================================= */
+
+loadState();
+
+$("#userName").textContent=
+  state.profile.displayName ||
+  state.profile.name;
+
+$("#penSize").value=
+  state.settings.penSize;
+
+$("#canvasBackground").value=
+  state.settings.canvasBackground;
+
+if(
+  state.profile.image
+){
+
+  renderProfile();
+
+}
+
+
+/*
+  START画面を基本の入口として表示。
+  Canvas作業中の更新だけは、現在の画面を維持。
+*/
+
+const lastScreen=
+  localStorage.getItem("SOMA_LAST_SCREEN");
+
+if(
+  lastScreen &&
+  lastScreen!=="start" &&
+  lastScreen!=="canvas"
+){
+
+  showScreen(lastScreen);
+
+}else{
+
+  showScreen("start");
+
+}
+
+
+/*
+  Canvasへ移動した時の初期化。
+*/
+
+if(state.currentSoma){
+
+  $("#canvasName").textContent=
+    state.currentSoma;
+
+}
+
+
+/* =========================================================
+   TAB COLOR
+   既存のTABオブジェクトに色を保存・反映
+========================================================= */
+
+const SOMA_TAB_COLORS = [
+  "#EAF2FF",
+  "#E4F7F0",
+  "#FFF6D9",
+  "#FFF0E5",
+  "#FFEAF0",
+  "#F0EAFF",
+  "#E6F7FB",
+  "#EEF1F5"
+];
+
+const tabColorButton = document.querySelector("[data-tab-color-button]");
+
+const tabColorPanel = document.createElement("div");
+tabColorPanel.className = "tab-color-panel";
+
+const tabColorLabel = document.createElement("div");
+tabColorLabel.className = "tab-color-label";
+tabColorLabel.textContent = "TABカラー";
+tabColorPanel.appendChild(tabColorLabel);
+
+SOMA_TAB_COLORS.forEach(color => {
+
+  const option = document.createElement("button");
+
+  option.type = "button";
+  option.className = "tab-color-option";
+  option.style.backgroundColor = color;
+  option.title = "TABカラー";
+
+  option.addEventListener("click", event => {
+
+    event.stopPropagation();
+
+    if(!selectedObjectId){
+      toast("カラーを変更するTABを選択してください");
+      tabColorPanel.classList.remove("show");
+      return;
+    }
+
+    const object = findObject(selectedObjectId);
+
+    if(!object || object.type !== "tab"){
+      toast("TABを選択してからカラーを変更してください");
+      tabColorPanel.classList.remove("show");
+      return;
+    }
+
+    snapshot();
+
+    object.tabColor = color;
+
+    saveState();
+    renderObjects();
+    addHistory("TABカラーを変更");
+
+    tabColorPanel.classList.remove("show");
+
+  });
+
+  tabColorPanel.appendChild(option);
+
+});
+
+if(tabColorButton){
+
+  const toolsPanel = document.querySelector(".tools");
+
+  if(toolsPanel){
+    toolsPanel.style.position = "relative";
+    toolsPanel.appendChild(tabColorPanel);
+  }
+
+  tabColorButton.addEventListener("click", event => {
+
+    event.stopPropagation();
+
+    if(!selectedObjectId){
+      toast("カラーを変更するTABを選択してください");
+      return;
+    }
+
+    const object = findObject(selectedObjectId);
+
+    if(!object || object.type !== "tab"){
+      toast("TABを選択してからカラーを変更してください");
+      return;
+    }
+
+    tabColorPanel.classList.toggle("show");
+
+  });
+
+}
+
+document.addEventListener("click", event => {
+
+  if(
+    !event.target.closest("[data-tab-color-button]") &&
+    !event.target.closest(".tab-color-panel")
+  ){
+    tabColorPanel.classList.remove("show");
+  }
+
+});
+
+/* =========================================================
+   END
+========================================================= */
+
+/* =========================================================
+   VOICE CALL / WEBRTC + PEERJS CLOUD SIGNALING
+   工程①・②の通話機能を維持し、工程③ Canvas共有を追加。
+========================================================= */
+const voiceModal = $("#voiceCallModal");
+const voiceMyId = $("#voiceMyId");
+const voicePeerId = $("#voicePeerId");
+const voicePrepare = $("#voicePrepare");
+const voiceCall = $("#voiceCall");
+const voiceAnswer = $("#voiceAnswer");
+const voiceReject = $("#voiceReject");
+const voiceMute = $("#voiceMute");
+const voiceHangup = $("#voiceHangup");
+const voiceStatus = $("#voiceStatus");
+const canvasSyncStatus = $("#canvasSyncStatus");
+const voiceTimer = $("#voiceTimer");
+const voiceRemoteAudio = $("#voiceRemoteAudio");
+const videoLocal = $("#videoLocal");
+const videoRemote = $("#videoRemote");
+const videoLocalPlaceholder = $("#videoLocalPlaceholder");
+const videoRemotePlaceholder = $("#videoRemotePlaceholder");
+
+
+let voicePeer = null;
+let voiceMyConnectionId = "";
+let voiceCurrentCall = null;
+let voiceLocalStream = null;
+let voiceMuted = false;
+let voiceStartedAt = 0;
+let voiceTimerHandle = null;
+
+let somaDataConnection = null;
+let somaSyncApplyingRemote = false;
+let somaSyncPeerId = "";
+
+const VOICE_PEER_OPTIONS = {
+  debug: 1,
+  config: {
+    iceServers: [
+      { urls: "stun:stun.l.google.com:19302" },
+      { urls: "stun:stun1.l.google.com:19302" }
+    ]
+  }
+};
+
+/* =========================================================
+   CANVAS SHARE / PEERJS DATA CONNECTION - 工程③
+   ビデオ通話で確立したPeerJS接続を利用し、Canvas状態を同期する。
+========================================================= */
+
+function canvasSyncSetStatus(message,type=""){
+  if(!canvasSyncStatus) return;
+  canvasSyncStatus.textContent=message;
+  canvasSyncStatus.className="voice-status"+(type?" "+type:"");
+}
+
+function canvasSyncSend(message){
+  if(!somaDataConnection || !somaDataConnection.open) return false;
+  try{
+    somaDataConnection.send(message);
+    return true;
+  }catch(error){
+    console.warn("SOMA Canvas sync send error",error);
+    canvasSyncSetStatus("Canvas共有：送信エラー","error");
+    return false;
+  }
+}
+
+function canvasSyncBroadcastCurrentState(){
+  if(somaSyncApplyingRemote) return;
+  if(!somaDataConnection || !somaDataConnection.open) return;
+
+  const page=getCurrentPage();
+
+  canvasSyncSend({
+    type:"canvas-state",
+    somaName:state.currentSoma,
+    pageIndex:state.currentPage,
+    page:JSON.parse(JSON.stringify(page)),
+    canvasBackground:state.settings.canvasBackground
+  });
+}
+
+function canvasSyncApplyState(message){
+  if(!message || !message.page) return;
+
+  somaSyncApplyingRemote=true;
+
+  try{
+    const soma=getCurrentSoma();
+    const pageIndex=Number.isInteger(message.pageIndex) ? message.pageIndex : 0;
+
+    while(soma.pages.length<=pageIndex){
+      soma.pages.push({
+        name:`ページ ${soma.pages.length+1}`,
+        drawing:null,
+        objects:[]
+      });
+    }
+
+    soma.pages[pageIndex]=JSON.parse(JSON.stringify(message.page));
+    state.currentPage=pageIndex;
+
+    if(message.canvasBackground){
+      state.settings.canvasBackground=message.canvasBackground;
+      const bg=$("#canvasBackground");
+      if(bg) bg.value=message.canvasBackground;
+    }
+
+    localStorage.setItem(STORAGE_KEY,JSON.stringify(state));
+
+    if(state.screen==="canvas"){
+      selectedObjectId=null;
+      renderCanvas();
+    }
+
+    canvasSyncSetStatus("Canvas共有：同期済み","ok");
+  }catch(error){
+    console.warn("SOMA Canvas sync apply error",error);
+    canvasSyncSetStatus("Canvas共有：同期エラー","error");
+  }finally{
+    somaSyncApplyingRemote=false;
+  }
+}
+
+function canvasSyncHandleData(message){
+  if(!message || typeof message!=="object") return;
+
+  if(message.type==="canvas-state"){
+    canvasSyncApplyState(message);
+    return;
+  }
+
+  if(message.type==="canvas-stroke"){
+    if(state.screen!=="canvas") return;
+    if(Number.isInteger(message.pageIndex) && message.pageIndex!==state.currentPage) return;
+
+    drawCanvasStroke(
+      message.x1,
+      message.y1,
+      message.x2,
+      message.y2,
+      message.color,
+      message.size,
+      Boolean(message.eraser)
+    );
+  }
+}
+
+function canvasSyncAttachConnection(connection){
+  if(!connection) return;
+
+  if(somaDataConnection && somaDataConnection!==connection){
+    try{somaDataConnection.close();}catch{}
+  }
+
+  somaDataConnection=connection;
+  somaSyncPeerId=connection.peer || "";
+  canvasSyncSetStatus("Canvas共有：接続中…");
+
+  connection.on("open",()=>{
+    canvasSyncSetStatus("Canvas共有：接続済み","ok");
+    // 初期状態は発信側（DataConnectionを開始した側）を基準にする。
+    if(connection.__somaOutgoingData){
+      canvasSyncBroadcastCurrentState();
+    }
+  });
+
+  connection.on("data",canvasSyncHandleData);
+
+  connection.on("close",()=>{
+    if(somaDataConnection===connection){
+      somaDataConnection=null;
+      somaSyncPeerId="";
+      canvasSyncSetStatus("Canvas共有：切断されました","error");
+    }
+  });
+
+  connection.on("error",error=>{
+    console.warn("SOMA Canvas data connection error",error);
+    canvasSyncSetStatus("Canvas共有：接続エラー","error");
+  });
+}
+
+function canvasSyncConnectToPeer(peerId){
+  if(!voicePeer || !voicePeer.open || !peerId) return;
+
+  if(
+    somaDataConnection &&
+    somaDataConnection.open &&
+    somaSyncPeerId===peerId
+  ){
+    return;
+  }
+
+  try{
+    const connection=voicePeer.connect(peerId,{
+      reliable:true,
+      metadata:{app:"SOMA",stage:"canvas-03"}
+    });
+    connection.__somaOutgoingData=true;
+    canvasSyncAttachConnection(connection);
+  }catch(error){
+    console.warn("SOMA Canvas connect error",error);
+    canvasSyncSetStatus("Canvas共有：接続開始に失敗","error");
+  }
+}
+
+
+function voiceSetStatus(message,type=""){
+  voiceStatus.textContent=message;
+  voiceStatus.className="voice-status"+(type?" "+type:"");
+}
+
+function voiceSetCallButtons(connected=false){
+  const incoming=!!voiceCurrentCall && !connected && voiceCurrentCall.__somaIncoming;
+  voiceCall.disabled=!voiceLocalStream || connected || incoming;
+  voiceAnswer.disabled=!voiceLocalStream || !incoming;
+  voiceReject.disabled=!incoming;
+  voiceMute.disabled=!voiceLocalStream || !connected;
+  voiceHangup.disabled=!connected;
+}
+
+function voiceStartPeer(){
+  if(voicePeer && !voicePeer.destroyed) return;
+  if(typeof Peer === "undefined"){
+    voiceSetStatus("音声通話サービスを読み込めません。インターネット接続を確認してください","error");
+    return;
+  }
+
+  voiceSetStatus("音声通話の接続サービスへ接続中…");
+  voicePeer=new Peer(undefined,VOICE_PEER_OPTIONS);
+
+  voicePeer.on("open",id=>{
+    voiceMyConnectionId=id;
+    voiceMyId.textContent=id;
+    voiceSetStatus("接続準備完了。マイクを準備してください","ok");
+  });
+
+  voicePeer.on("call",call=>{
+    // 着信時は自動接続せず、相手の「応答」を待つ。
+    voiceCurrentCall=call;
+    call.__somaIncoming=true;
+    voicePeerId.value=call.peer;
+    voiceSetStatus(voiceLocalStream
+      ? "📲 着信中…「応答」または「拒否」を選択してください"
+      : "📲 着信中…「マイク・カメラを準備」を押してから「応答」してください",
+      "ok");
+    voiceSetCallButtons(false);
+  });
+
+  voicePeer.on("connection",connection=>{
+    canvasSyncAttachConnection(connection);
+  });
+
+  voicePeer.on("error",error=>{
+    console.error("PeerJS error",error);
+    const messages={
+      unavailable_id:"接続IDが使用できません。ページを開き直してください。",
+      peer_unavailable:"相手の接続IDが見つかりません。相手がページを開いているか確認してください。",
+      network:"通信サービスへ接続できません。インターネット接続を確認してください。",
+      server_error:"通信サービスでエラーが発生しました。",
+      socket_error:"通信サービスとの接続でエラーが発生しました。"
+    };
+    voiceSetStatus(messages[error.type]||`接続エラー：${error.type||"unknown"}`,"error");
+  });
+
+  voicePeer.on("disconnected",()=>{
+    voiceSetStatus("接続サービスから切断されました。再接続中…","error");
+    if(voicePeer && !voicePeer.destroyed) voicePeer.reconnect();
+  });
+
+  voicePeer.on("close",()=>{
+    voiceSetStatus("音声通話サービスとの接続が終了しました","error");
+  });
+}
+
+async function voicePrepareMic(){
+  try{
+    if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      throw new Error("getUserMedia unavailable");
+    }
+    if(!voiceLocalStream){
+      voiceLocalStream=await navigator.mediaDevices.getUserMedia({
+        audio:{echoCancellation:true,noiseSuppression:true,autoGainControl:true},
+        video:{facingMode:"user",width:{ideal:1280},height:{ideal:720}}
+      });
+      videoLocal.srcObject=voiceLocalStream;
+      videoLocalPlaceholder.style.display="none";
+    }
+    voicePrepare.textContent="✓ マイク・カメラ準備済み";
+    voicePrepare.disabled=true;
+
+    // ビデオ通話の発信ボタンを明示的に有効化。
+    // 相手のIDが未入力でも、クリック時に「相手の接続IDを入力してください」
+    // と表示できるようにする。
+    voiceCall.disabled=false;
+    voiceCall.removeAttribute("disabled");
+
+    if(voiceCurrentCall && voiceCurrentCall.__somaIncoming){
+      voiceSetStatus("📲 着信中…「応答」または「拒否」を選択してください","ok");
+      voiceSetCallButtons(false);
+    }else{
+      voiceSetStatus("準備完了。相手の接続IDを入力して「発信」を押してください","ok");
+      voiceSetCallButtons(false);
+    }
+  }catch(error){
+    console.error(error);
+    voiceSetStatus("マイク・カメラを使用できません。Chromeのマイク・カメラ許可を確認してください","error");
+  }
+}
+
+function voiceAttachCall(call){
+  voiceCurrentCall=call;
+  voicePeerId.value=call.peer;
+  voiceSetCallButtons(false);
+  call.on("stream",stream=>{
+    voiceRemoteAudio.srcObject=stream;
+    videoRemote.srcObject=stream;
+    videoRemotePlaceholder.style.display="none";
+    const playPromise=voiceRemoteAudio.play();
+    if(playPromise) playPromise.catch(()=>voiceSetStatus("接続しました。音声が聞こえない場合は、パソコンの音量をご確認ください。","ok"));
+    voiceSetStatus("🎥 ビデオ通話が接続されました","ok");
+    voiceStartTimer();
+    voiceSetCallButtons(true);
+    if(call.__somaOutgoing){
+      canvasSyncConnectToPeer(call.peer);
+    }
+  });
+  call.on("close",()=>{
+    voiceCleanup(false);
+    voiceSetStatus("相手が通話を終了しました");
+  });
+  call.on("error",error=>{
+    console.error("call error",error);
+    voiceSetStatus("音声接続に失敗しました。ネットワーク環境を確認してください","error");
+    voiceCleanup(false);
+  });
+}
+
+function voiceAnswerCall(call){
+  if(!call){
+    voiceSetStatus("着信がありません","error");
+    return;
+  }
+  if(!voiceLocalStream){
+    voiceSetStatus("先に「マイク・カメラを準備」を押してください","error");
+    return;
+  }
+  try{
+    call.__somaIncoming=false;
+    voiceSetStatus("着信に応答しています…");
+    call.answer(voiceLocalStream);
+    voiceAttachCall(call);
+  }catch(error){
+    console.error(error);
+    voiceSetStatus("着信への応答に失敗しました","error");
+  }
+}
+
+function voiceRejectCall(){
+  const call=voiceCurrentCall;
+  if(!call || !call.__somaIncoming){
+    voiceSetStatus("着信がありません","error");
+    return;
+  }
+  try{ call.close(); }catch{}
+  voiceCurrentCall=null;
+  voiceSetStatus("着信を拒否しました");
+  voiceSetCallButtons(false);
+}
+
+function voiceMakeCall(){
+  const target=voicePeerId.value.trim();
+  if(!target){
+    voiceSetStatus("相手の接続IDを入力してください","error");
+    return;
+  }
+  if(target===voiceMyConnectionId){
+    voiceSetStatus("自分自身には発信できません","error");
+    return;
+  }
+  if(!voicePeer || voicePeer.destroyed || !voicePeer.open){
+    voiceSetStatus("接続サービスの準備中です。少し待ってから再度発信してください","error");
+    return;
+  }
+  if(!voiceLocalStream){
+    voiceSetStatus("先に「マイクを準備」を押してください","error");
+    return;
+  }
+  try{
+    voiceSetStatus("発信中…相手の応答を待っています");
+    const call=voicePeer.call(target,voiceLocalStream,{metadata:{app:"SOMA",stage:"video-02"}});
+    if(!call){throw new Error("call unavailable");}
+    call.__somaOutgoing=true;
+    voiceAttachCall(call);
+  }catch(error){
+    console.error(error);
+    voiceSetStatus("発信に失敗しました。相手の接続IDを確認してください","error");
+  }
+}
+
+function voiceStartTimer(){
+  if(voiceTimerHandle)return;
+  voiceStartedAt=Date.now();
+  voiceTimerHandle=setInterval(()=>{
+    const seconds=Math.floor((Date.now()-voiceStartedAt)/1000);
+    const mm=String(Math.floor(seconds/60)).padStart(2,"0");
+    const ss=String(seconds%60).padStart(2,"0");
+    voiceTimer.textContent=`通話中 ${mm}:${ss}`;
+  },250);
+}
+
+function voiceStopTimer(){
+  if(voiceTimerHandle){clearInterval(voiceTimerHandle);voiceTimerHandle=null;}
+  voiceTimer.textContent="待機中";
+}
+
+function voiceCleanup(destroyPeer=false){
+  if(voiceCurrentCall){
+    try{voiceCurrentCall.close();}catch{}
+  }
+  voiceCurrentCall=null;
+  voiceRemoteAudio.srcObject=null;
+  videoRemote.srcObject=null;
+  videoRemotePlaceholder.style.display="flex";
+  voiceStopTimer();
+  voiceMuted=false;
+  if(voiceLocalStream){
+    voiceLocalStream.getAudioTracks().forEach(track=>track.enabled=true);
+  }
+  voiceMute.textContent="🔇 ミュート";
+  voiceSetCallButtons(false);
+  voicePrepare.disabled=Boolean(voiceLocalStream);
+  if(!voiceLocalStream){voiceCall.disabled=true;voiceMute.disabled=true;}
+  if(somaDataConnection){
+    try{somaDataConnection.close();}catch{}
+    somaDataConnection=null;
+    somaSyncPeerId="";
+    canvasSyncSetStatus("Canvas共有：待機中");
+  }
+  if(destroyPeer && voicePeer){
+    try{voicePeer.destroy();}catch{}
+    voicePeer=null;
+    voiceMyConnectionId="";
+    voiceMyId.textContent="接続IDを準備中…";
+  }
+}
+
+function voiceOpen(){
+  voiceModal.classList.remove("hide");
+  voiceStartPeer();
+}
+
+voicePrepare.addEventListener("click",voicePrepareMic);
+voiceCall.addEventListener("click",voiceMakeCall);
+voiceAnswer.addEventListener("click",()=>{
+  if(voiceCurrentCall) voiceAnswerCall(voiceCurrentCall);
+});
+voiceReject.addEventListener("click",voiceRejectCall);
+
+// 発信ボタンは「準備完了後に必ずクリック可能」にする。
+voiceCall.type="button";
+
+voiceMute.addEventListener("click",()=>{
+  if(!voiceLocalStream || !voiceCurrentCall)return;
+  voiceMuted=!voiceMuted;
+  voiceLocalStream.getAudioTracks().forEach(track=>track.enabled=!voiceMuted);
+  voiceMute.textContent=voiceMuted?"🔊 ミュート解除":"🔇 ミュート";
+});
+voiceHangup.addEventListener("click",()=>{
+  voiceCleanup(false);
+  voiceSetStatus("通話を終了しました");
+});
+$("[data-voice-call]").addEventListener("click",voiceOpen);
+$("[data-voice-close]").addEventListener("click",()=>{
+  voiceCleanup(false);
+  voiceModal.classList.add("hide");
+});
+voiceModal.addEventListener("click",event=>{
+  if(event.target===voiceModal){
+    voiceCleanup(false);
+    voiceModal.classList.add("hide");
+  }
+});
+
+/* =========================================================
+   END - ENGINE 01
+========================================================= */
+
+</script>
+
+</body>
+</html>
